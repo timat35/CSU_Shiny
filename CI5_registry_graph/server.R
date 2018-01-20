@@ -23,7 +23,10 @@ shinyServer(function(input, output, session) {
   file_cancer_color <- "data/color_cancer.csv"
   file_data <- "data/"
   file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
-  file_utf8 <- "_UTF8"
+  #file_utf8 <- "_UTF8"
+  
+#if Rinno installation: 
+  file_utf8 <- ""
 
   
 #to test
