@@ -1,0 +1,466 @@
+registry,registry_lab,notes,CI5_continent,ethnic_group,selection
+12001,"Algeria, Sétif (2008-2011)",*,1,99,1
+12003,"Algeria, Batna (2008-2012)",*,1,99,1
+404002,"Kenya, Nairobi (2008-2012)",*,1,99,1
+690000,Seychelles (2009-2012),,1,99,1
+710001,"South Africa, Eastern Cape (2008-2012)",*,1,99,1
+800002,"Uganda, Kyadondo County (2008-2012)",*,1,99,1
+716002,"Zimbabwe, Harare: African (2010-2012)",*,1,70,1
+32011,"Argentina, Chaco (2008-2012)",,2,99,1
+32005,"Argentina, Entre Rios Province (2008-2011)",,2,99,1
+32006,"Argentina, Córdoba (2008-2012)",,2,99,1
+32007,"Argentina, Mendoza (2008-2012)",,2,99,1
+32008,"Argentina, Tierra del Fuego (2008-2012)",,2,99,1
+76011,"Brazil, Aracaju (2008-2012)",,2,99,1
+76012,"Brazil, Curitiba (2008-2011)",,2,99,1
+76005,"Brazil, Florianopolis (2008-2010)",,2,99,1
+76002,"Brazil, Goiânia (2008-2012)",*,2,99,1
+76017,"Brazil, Jau (2008-2012)",,2,99,1
+76020,"Brazil, Pocos de Caldas (2008-2011)",,2,99,1
+152003,"Chile, Region of Antofagasta (2008-2010)",*,2,99,1
+152002,"Chile, Bío Bío Province (2008-2012)",,2,99,1
+152005,"Chile, Concepcion (2008-2010)",,2,99,1
+152001,"Chile, Valdivia (2008-2012)",*,2,99,1
+170001,"Colombia, Cali (2008-2012)",,2,99,1
+170002,"Colombia, Bucaramanga (2008-2012)",,2,99,1
+170003,"Colombia, Manizales (2008-2012)",*,2,99,1
+170004,"Colombia, Pasto (2008-2012)",,2,99,1
+188000,Costa Rica (2008-2011),,2,99,1
+218002,"Ecuador, Cuenca (2008-2012)",,2,99,1
+218003,"Ecuador, Guayaquil (2008-2012)",,2,99,1
+218004,"Ecuador, Loja (2008-2010)",*,2,99,1
+218005,"Ecuador, Manabi (2008-2012)",*,2,99,1
+218001,"Ecuador, Quito (2008-2012)",,2,99,1
+250091,"France, Martinique (2008-2012)",*,2,99,1
+250094,French Guiana (2008-2012),*,2,99,1
+388001,"Jamaica, Kingston and St Andrew (2008-2011)",*,2,99,1
+604002,"Peru, Lima (2010-2012)",*,2,99,1
+630000,"USA, Puerto Rico (2008-2012)",,2,99,1
+858000,Uruguay (2008-2012),,2,99,1
+124001,"Canada, Alberta (2008-2012)",*,3,99,1
+124002,"Canada, British Columbia (2008-2012)",,3,99,1
+124003,"Canada, Manitoba (2008-2012)",,3,99,1
+124005,"Canada, New Brunswick (2008-2012)",*,3,99,1
+124008,"Canada, Newfoundland and Labrador (2008-2012)",*,3,99,1
+124004,"Canada, Northwest Territories (2008-2012)",*,3,99,1
+124006,"Canada, Nova Scotia (2008-2012)",*,3,99,1
+124013,"Canada, Nunavut (2008-2012)",*,3,99,1
+124010,"Canada, Ontario (2008-2012)",*,3,99,1
+124007,"Canada, Prince Edward Island (2008-2012)",*,3,99,1
+124012,"Canada, Saskatchewan (2008-2012)",,3,99,1
+124009,"Canada, Yukon (2008-2012)",*,3,99,1
+840000,USA (2008-2012),,3,99,1
+840000,USA: White (2008-2012),,3,10,1
+840000,USA: Black (2008-2012),,3,30,1
+840080,"USA, NPCR (2008-2012)",,3,99,0
+840080,"USA, NPCR: White (2008-2012)",,3,10,0
+840080,"USA, NPCR: Black (2008-2012)",,3,30,0
+840080,"USA, NPCR: Asian and Pacific Islander (2008-2012)",,3,29,0
+840080,"USA, NPCR: American Indian/Alaska Natives (2008-2012)",,3,42,0
+840024,"USA, SEER (18 registries) (2008-2012)",,3,99,0
+840024,"USA, SEER (18 registries): White (2008-2012)",*,3,10,0
+840024,"USA, SEER (18 registries): Non-Hispanic White (2008-2012)",*,3,60,0
+840024,"USA, SEER (18 registries): Hispanic White (2008-2012)",*,3,50,0
+840024,"USA, SEER (18 registries): Black (2008-2012)",*,3,30,0
+840024,"USA, SEER (18 registries): Asian and Pacific Islander (2008-2012)",*,3,29,0
+840020,"USA, SEER (9 registries) (2008-2012)",,3,99,0
+840020,"USA, SEER (9 registries): White (2008-2012)",*,3,10,0
+840020,"USA, SEER (9 registries): Black (2008-2012)",*,3,30,0
+840051,"USA, Alabama (2008-2012)",,3,99,0
+840051,"USA, Alabama: White (2008-2012)",,3,10,0
+840051,"USA, Alabama: Black (2008-2012)",,3,30,0
+840050,"USA, Alaska (2008-2012)",,3,99,0
+840050,"USA, Alaska: Alaska Natives (2008-2012)",,3,42,0
+840052,"USA, Arizona (2008-2012)",,3,99,0
+840052,"USA, Arizona: White (2008-2012)",,3,10,0
+840052,"USA, Arizona: Black (2008-2012)",,3,30,0
+840052,"USA, Arizona: American Indian (2008-2012)",,3,42,0
+840040,"USA, Arkansas (2008-2012)",,3,99,0
+840040,"USA, Arkansas: White (2008-2012)",,3,10,0
+840040,"USA, Arkansas: Black (2008-2012)",,3,30,0
+840025,"USA, California (2008-2012)",,3,99,0
+840025,"USA, California: White (2008-2012)",,3,10,0
+840025,"USA, California: Black (2008-2012)",,3,30,0
+840025,"USA, California: American Indian (2008-2012)",,3,42,0
+840003,"USA, California, Los Angeles County (2008-2012)",,3,99,0
+840003,"USA, California, Los Angeles County: White (2008-2012)",*,3,10,0
+840003,"USA, California, Los Angeles County: Non-Hispanic White (2008-2012)",*,3,60,0
+840003,"USA, California, Los Angeles County: Hispanic White (2008-2012)",*,3,50,0
+840003,"USA, California, Los Angeles County: Black (2008-2012)",*,3,30,0
+840003,"USA, California, Los Angeles County: Chinese (2008-2012)",*,3,20,0
+840003,"USA, California, Los Angeles County: Filipino (2008-2012)",*,3,23,0
+840003,"USA, California, Los Angeles County: Korean (2008-2012)",*,3,22,0
+840002,"USA, California, San Francisco Bay Area (2008-2012)",,3,99,0
+840002,"USA, California, San Francisco Bay Area: White (2008-2012)",*,3,10,0
+840002,"USA, California, San Francisco Bay Area: Non-Hispanic White (2008-2012)",*,3,60,0
+840002,"USA, California, San Francisco Bay Area: Hispanic White (2008-2012)",*,3,50,0
+840002,"USA, California, San Francisco Bay Area: Black (2008-2012)",*,3,30,0
+840002,"USA, California, San Francisco Bay Area: Chinese (2008-2012)",*,3,20,0
+840002,"USA, California, San Francisco Bay Area: Filipino (2008-2012)",*,3,23,0
+840002,"USA, California, San Francisco Bay Area: Japanese (2008-2012)",*,3,21,0
+840053,"USA, Colorado (2008-2012)",,3,99,0
+840053,"USA, Colorado: White (2008-2012)",,3,10,0
+840053,"USA, Colorado: Black (2008-2012)",,3,30,0
+840004,"USA, Connecticut (2008-2012)",,3,99,0
+840004,"USA, Connecticut: White (2008-2012)",*,3,10,0
+840004,"USA, Connecticut: Black (2008-2012)",*,3,30,0
+840041,"USA, Delaware (2008-2012)",,3,99,0
+840041,"USA, Delaware: White (2008-2012)",,3,10,0
+840041,"USA, Delaware: Black (2008-2012)",,3,30,0
+840055,"USA, Florida (2008-2012)",,3,99,0
+840055,"USA, Florida: White (2008-2012)",,3,10,0
+840055,"USA, Florida: Black (2008-2012)",,3,30,0
+840056,"USA, Georgia (2008-2012)",,3,99,0
+840056,"USA, Georgia: White (2008-2012)",,3,10,0
+840056,"USA, Georgia: Black (2008-2012)",,3,30,0
+840005,"USA, Georgia, Atlanta (2008-2012)",,3,99,0
+840005,"USA, Georgia, Atlanta: White (2008-2012)",*,3,10,0
+840005,"USA, Georgia, Atlanta: Black (2008-2012)",*,3,30,0
+840057,"USA, Idaho (2008-2012)",,3,99,0
+840058,"USA, Illinois (2008-2012)",,3,99,0
+840058,"USA, Illinois: White (2008-2012)",,3,10,0
+840058,"USA, Illinois: Black (2008-2012)",,3,30,0
+840059,"USA, Indiana (2008-2012)",,3,99,0
+840059,"USA, Indiana: White (2008-2012)",,3,10,0
+840059,"USA, Indiana: Black (2008-2012)",,3,30,0
+840006,"USA, Iowa (2008-2012)",,3,99,0
+840019,"USA, Kentucky (2008-2012)",,3,99,0
+840022,"USA, Louisiana (2008-2012)",,3,99,0
+840022,"USA, Louisiana: White (2008-2012)",,3,10,0
+840022,"USA, Louisiana: Black (2008-2012)",,3,30,0
+840007,"USA, Louisiana, New Orleans (2008-2012)",,3,99,0
+840007,"USA, Louisiana, New Orleans: White (2008-2012)",*,3,10,0
+840007,"USA, Louisiana, New Orleans: Black (2008-2012)",*,3,30,0
+840061,"USA, Maine (2008-2012)",,3,99,0
+840042,"USA, Maryland (2008-2012)",,3,99,0
+840042,"USA, Maryland: White (2008-2012)",,3,10,0
+840042,"USA, Maryland: Black (2008-2012)",,3,30,0
+840060,"USA, Massachusetts (2008-2012)",,3,99,0
+840060,"USA, Massachusetts: White (2008-2012)",,3,10,0
+840060,"USA, Massachusetts: Black (2008-2012)",,3,30,0
+840062,"USA, Michigan (2008-2012)",,3,99,0
+840062,"USA, Michigan: White (2008-2012)",,3,10,0
+840062,"USA, Michigan: Black (2008-2012)",,3,30,0
+840008,"USA, Michigan, Detroit (2008-2012)",,3,99,0
+840008,"USA, Michigan, Detroit: White (2008-2012)",*,3,10,0
+840008,"USA, Michigan, Detroit: Black (2008-2012)",*,3,30,0
+840043,"USA, Minnesota (2008-2012)",,3,99,0
+840044,"USA, Mississippi (2008-2012)",,3,99,0
+840063,"USA, Missouri (2008-2012)",,3,99,0
+840063,"USA, Missouri: White (2008-2012)",,3,10,0
+840063,"USA, Missouri: Black (2008-2012)",,3,30,0
+840064,"USA, Montana (2008-2012)",,3,99,0
+840047,"USA, Nebraska (2008-2012)",,3,99,0
+840047,"USA, Nebraska: White (2008-2012)",,3,10,0
+840047,"USA, Nebraska: Black (2008-2012)",,3,30,0
+840049,"USA, Nevada (2008-2012)",,3,99,0
+840049,"USA, Nevada: White (2008-2012)",,3,10,0
+840049,"USA, Nevada: Black (2008-2012)",,3,30,0
+840048,"USA, New Hampshire (2008-2012)",,3,99,0
+840015,"USA, New Jersey (2008-2012)",,3,99,0
+840015,"USA, New Jersey: White (2008-2012)",,3,10,0
+840015,"USA, New Jersey: Black (2008-2012)",,3,30,0
+840009,"USA, New Mexico (2008-2012)",,3,99,0
+840009,"USA, New Mexico: White (2008-2012)",*,3,10,0
+840009,"USA, New Mexico: Hispanic White (2008-2012)",*,3,50,0
+840009,"USA, New Mexico: Non-Hispanic White (2008-2012)",*,3,60,0
+840016,"USA, New York State (2008-2012)",,3,99,0
+840016,"USA, New York State: White (2008-2012)",,3,10,0
+840016,"USA, New York State: Black (2008-2012)",,3,30,0
+840045,"USA, North Carolina (2008-2012)",,3,99,0
+840045,"USA, North Carolina: White (2008-2012)",,3,10,0
+840045,"USA, North Carolina: Black (2008-2012)",,3,30,0
+840046,"USA, North Dakota (2008-2012)",,3,99,0
+840065,"USA, Ohio (2008-2012)",,3,99,0
+840065,"USA, Ohio: White (2008-2012)",,3,10,0
+840065,"USA, Ohio: Black (2008-2012)",,3,30,0
+840066,"USA, Oklahoma (2008-2012)",,3,99,0
+840066,"USA, Oklahoma: White (2008-2012)",,3,10,0
+840066,"USA, Oklahoma: Black (2008-2012)",,3,30,0
+840067,"USA, Oregon (2008-2012)",,3,99,0
+840067,"USA, Oregon: White (2008-2012)",,3,10,0
+840067,"USA, Oregon: Black (2008-2012)",,3,30,0
+840068,"USA, Pennsylvania (2008-2012)",,3,99,0
+840068,"USA, Pennsylvania: White (2008-2012)",,3,10,0
+840068,"USA, Pennsylvania: Black (2008-2012)",,3,30,0
+840069,"USA, Rhode Island (2008-2012)",,3,99,0
+840069,"USA, Rhode Island: White (2008-2012)",,3,10,0
+840069,"USA, Rhode Island: Black (2008-2012)",,3,30,0
+840070,"USA, South Carolina (2008-2012)",,3,99,0
+840070,"USA, South Carolina: White (2008-2012)",,3,10,0
+840070,"USA, South Carolina: Black (2008-2012)",,3,30,0
+840078,"USA, South Dakota (2008-2012)",,3,99,0
+840079,"USA, Tennessee (2008-2012)",,3,99,0
+840079,"USA, Tennessee: White (2008-2012)",,3,10,0
+840079,"USA, Tennessee: Black (2008-2012)",,3,30,0
+840071,"USA, Texas (2008-2012)",,3,99,0
+840071,"USA, Texas: White (2008-2012)",,3,10,0
+840071,"USA, Texas: Black (2008-2012)",,3,30,0
+840012,"USA, Utah (2008-2012)",,3,99,0
+840072,"USA, Vermont (2008-2012)",,3,99,0
+840077,"USA, Virginia (2008-2012)",,3,99,0
+840077,"USA, Virginia: White (2008-2012)",,3,10,0
+840077,"USA, Virginia: Black (2008-2012)",,3,30,0
+840073,"USA, Washington State (2008-2012)",,3,99,0
+840013,"USA, Washington, Seattle (2008-2012)",,3,99,0
+840074,"USA, West Virginia (2008-2012)",,3,99,0
+840075,"USA, Wisconsin (2008-2012)",,3,99,0
+840075,"USA, Wisconsin: White (2008-2012)",,3,10,0
+840075,"USA, Wisconsin: Black (2008-2012)",,3,30,0
+840076,"USA, Wyoming (2008-2012)",,3,99,0
+48000,Bahrain: Bahraini (2008-2012),,4,46,1
+96000,Brunei Darussalam (2010-2012),,4,99,1
+156012,"China, Anshan City (2008-2012)",,4,99,1
+156001,"China, Beijing (2008-2012)",,4,99,1
+156031,"China, Benxi (2008-2011)",,4,99,1
+156006,"China, Cixian County (2008-2012)",,4,99,1
+156024,"China, Guangzhou (2010-2012)",,4,99,1
+156051,"China, Guanyun (2008-2012)",,4,99,1
+156025,"China, Haimen County (2008-2012)",,4,99,1
+156021,"China, Hangzhou City (2008-2012)",,4,99,1
+156015,"China, Harbin City, Nangang District (2008-2012)",,4,99,1
+156053,"China, Hefei (2010-2012)",,4,99,1
+156054,"China, Hengdong (2009-2012)",,4,99,1
+156030,"China, Hong Kong (2008-2012)",,4,99,1
+156057,"China, Huaiyin District, Huai'an (2009-2012)",*,4,99,1
+156060,"China, Jiangmen (2010-2012)",,4,99,1
+156032,"China, Jianhu County (2010-2012)",,4,99,1
+156007,"China, Jiashan County (2008-2012)",,4,99,1
+156023,"China, Jiaxing City (2008-2012)",,4,99,1
+156068,"China, Lianyungang (2008-2012)",,4,99,1
+156008,"China, Linzhou County (2008-2012)",,4,99,1
+156071,"China, Liuzhou (2009-2012)",,4,99,1
+156075,"China, Maanshan (2008-2012)",,4,99,1
+156002,"China, Qidong County (2008-2012)",,4,99,1
+156003,"China, Shanghai City (2008-2012)",,4,99,1
+156083,"China, Shenyang (2008-2012)",,4,99,1
+156016,"China, Shexian County (2008-2012)",*,4,99,1
+156084,"China, Sheyang (2008-2012)",,4,99,1
+156088,"China, Tongling City (2008-2012)",,4,99,1
+156009,"China, Wuhan City (2008-2012)",,4,99,1
+156092,"China, Wuxi (2010-2012)",,4,99,1
+156093,"China, Xianju (2010-2012)",,4,99,1
+156096,"China, Xiping (2010-2012)",,4,99,1
+156099,"China, Yanshi (2010-2012)",,4,99,1
+156018,"China, Yanting County (2008-2012)",,4,99,1
+156102,"China, Yueyanglou (2009-2012)",,4,99,1
+156014,"China, Zhongshan City (2010-2012)",,4,99,1
+156105,"China, Zhuhai (2010-2012)",,4,99,1
+356001,"India, Ahmedabad (2008-2011)",*,4,99,1
+356002,"India, Bangalore (2008-2012)",*,4,99,1
+356007,"India; Barshi, Paranda, and Bhum (2008-2012)",*,4,99,1
+356014,"India, Bhopal (2008-2012)",*,4,99,1
+356025,"India, Cachar (2008-2012)",*,4,99,1
+356004,"India, Chennai (2008-2012)",*,4,99,1
+356011,"India, Dindigul, Ambilikkai (2008-2012)",*,4,99,1
+356015,"India, Kamrup Urban District (2009-2012)",*,4,99,1
+356021,"India, Kollam (2008-2012)",*,4,99,1
+356019,"India, Mizoram (2008-2012)",*,4,99,1
+356003,"India, Mumbai (2008-2012)",*,4,99,1
+356006,"India, Poona (2008-2011)",*,4,99,1
+356018,"India, Sikkim State (2008-2012)",*,4,99,1
+356022,"India, Tripura (2010-2012)",*,4,99,1
+356008,"India, Trivandrum (2008-2012)",*,4,99,1
+356020,"India, Wardha (2010-2012)",*,4,99,1
+364003,"Iran (Islamic Republic of), Golestan Province (2008-2011)",,4,99,1
+376000,Israel (2008-2012),,4,99,1
+376000,Israel: Jews (2008-2012),*,4,90,0
+376000,"Israel: Non-Jews, Arab (2008-2012)",*,4,94,0
+376000,"Israel: Non-Jews, Other (2008-2012)",*,4,95,0
+392010,"Japan, Aichi Prefecture (2008-2012)",,4,99,1
+392009,"Japan, Fukui Prefecture (2008-2012)",,4,99,1
+392001,"Japan, Hiroshima Prefecture (2008-2012)",,4,99,1
+392002,"Japan, Miyagi Prefecture (2008-2010)",,4,99,1
+392003,"Japan, Nagasaki Prefecture (2008-2012)",,4,99,1
+392008,"Japan, Niigata Prefecture (2008-2012)",,4,99,1
+392004,"Japan, Osaka Prefecture (2008-2012)",,4,99,1
+392011,"Japan, Tochigi Prefecture (2008-2012)",,4,99,1
+392006,"Japan, Yamagata Prefecture (2008-2012)",,4,99,1
+400000,Jordan: Jordanians (2008-2012),*,4,99,1
+410000,Republic of Korea (2008-2012),,4,99,1
+410002,"Republic of Korea, Busan (2008-2012)",,4,99,0
+410004,"Republic of Korea, Daegu (2008-2012)",,4,99,0
+410005,"Republic of Korea, Daejeon (2008-2012)",,4,99,0
+410010,"Republic of Korea, Gwangju (2008-2012)",,4,99,0
+410011,"Republic of Korea, Incheon (2008-2012)",,4,99,0
+410009,"Republic of Korea, Jejudo (2008-2012)",,4,99,0
+410003,"Republic of Korea, Seoul (2008-2012)",,4,99,0
+410008,"Republic of Korea, Ulsan (2008-2012)",,4,99,0
+414000,Kuwait (2008-2012),,4,99,1
+414000,Kuwait: Kuwaitis (2008-2012),,4,25,0
+414000,Kuwait: Non-Kuwaitis (2008-2012),,4,26,0
+458002,"Malaysia, Penang (2008-2010)",*,4,99,1
+458002,"Malaysia, Penang: Chinese (2008-2010)",*,4,20,0
+458002,"Malaysia, Penang: Malay (2008-2010)",*,4,27,0
+458002,"Malaysia, Penang: Indian (2008-2010)",*,4,40,0
+608002,"Philippines, Manila (2008-2012)",*,4,99,1
+608003,"Philippines, Rizal (2008-2012)",*,4,99,1
+634000,Qatar: Qatari (2008-2012),,4,68,1
+682001,"Saudi Arabia, Riyadh: Saudi (2008-2012)",*,4,58,1
+764003,"Thailand, Bangkok (2008-2010)",,4,99,1
+764001,"Thailand, Chiang Mai (2008-2012)",,4,99,1
+764008,"Thailand, Chonburi (2008-2011)",,4,99,1
+764002,"Thailand, Khon Kaen (2008-2012)",,4,99,1
+764005,"Thailand, Lampang (2008-2012)",,4,99,1
+764007,"Thailand, Lopburi Province (2009-2012)",*,4,99,1
+764004,"Thailand, Songkhla (2008-2012)",,4,99,1
+792002,"Turkey, Antalya (2008-2012)",,4,99,1
+792004,"Turkey, Bursa (2008-2012)",,4,99,1
+792007,"Turkey, Edirne (2008-2012)",,4,99,1
+792005,"Turkey, Erzurum (2010-2012)",,4,99,1
+792006,"Turkey, Eskisehir (2008-2012)",,4,99,1
+792001,"Turkey, Izmir (2008-2012)",,4,99,1
+792003,"Turkey, Samsun (2008-2012)",,4,99,1
+792008,"Turkey, Trabzon (2008-2012)",,4,99,1
+704002,"Viet Nam, Ho Chi Minh City (2009-2012)",*,4,99,1
+40000,Austria (2008-2012),,5,99,1
+40002,"Austria, Carinthia (2008-2012)",,5,99,0
+40007,"Austria, Tyrol (2008-2012)",,5,99,0
+40008,"Austria, Vorarlberg (2008-2012)",,5,99,0
+112000,Belarus (2008-2012),*,5,99,1
+56000,Belgium (2008-2012),*,5,99,1
+100000,Bulgaria (2008-2012),,5,99,1
+191000,Croatia (2008-2012),,5,99,1
+196000,Cyprus (2008-2012),,5,99,1
+203000,Czech Republic (2008-2012),,5,99,1
+208000,Denmark (2008-2012),,5,99,1
+233000,Estonia (2008-2012),,5,99,1
+250001,"France, Bas-Rhin (2008-2011)",*,5,99,1
+250002,"France, Calvados (2008-2012)",*,5,99,1
+250003,"France, Doubs (2008-2012)",*,5,99,1
+250010,"France, Gironde (2008-2012)",*,5,99,1
+250004,"France, Haut-Rhin (2008-2012)",*,5,99,1
+250008,"France, Hérault (2008-2012)",*,5,99,1
+250005,"France, Isère (2008-2012)",*,5,99,1
+250018,"France, Lille-Métropole (2008-2012)",*,5,99,1
+250009,"France, Limousin (2009-2012)",*,5,99,1
+250014,"France, Loire-Atlantique (2008-2012)",*,5,99,1
+250016,"France, Manche (2008-2011)",*,5,99,1
+250006,"France, Somme (2008-2012)",*,5,99,1
+250007,"France, Tarn (2008-2012)",*,5,99,1
+250011,"France, Territoire de Belfort (2008-2012)",*,5,99,1
+250017,"France, Vendée (2008-2012)",*,5,99,1
+276003,"Germany, Bavaria (2008-2012)",,5,99,1
+276012,"Germany, Bremen (2008-2012)",,5,99,1
+276002,"Germany, Hamburg (2008-2012)",,5,99,1
+276006,"Germany, Lower Saxony (2008-2012)",,5,99,1
+276005,"Germany, Munich (2008-2012)",,5,99,1
+276011,"Germany, North Rhine-Westphalia (2008-2012)",*,5,99,1
+276009,"Germany, Rhineland-Palatinate (2008-2012)",,5,99,1
+276030,"Germany, Saarland (2008-2012)",,5,99,1
+276016,"Germany, Schleswig-Holstein (2008-2012)",*,5,99,1
+352000,Iceland (2008-2012),,5,99,1
+372000,Ireland (2008-2012),,5,99,1
+380050,"Italy, Aosta Valley (2008-2012)",*,5,99,1
+380041,"Italy, Barletta (2008-2011)",,5,99,1
+380043,"Italy, Bergamo (2008-2012)",,5,99,1
+380017,"Italy, Biella (2008-2012)",,5,99,1
+380044,"Italy, Caserta (2008-2010)",,5,99,1
+380037,"Italy, Catania, Messina and Enna (2008-2012)",,5,99,1
+380038,"Italy, Como (2008-2011)",,5,99,1
+380045,"Italy, Cremona (2008-2010)",,5,99,1
+380012,"Italy, Ferrara (2008-2011)",,5,99,1
+380001,"Italy, Florence and Prato (2008-2010)",,5,99,1
+380018,"Italy, Friuli-Venezia Giulia (2008-2010)",,5,99,1
+380003,"Italy, Latina (2008-2012)",,5,99,1
+380039,"Italy, Lecco (2008-2010)",,5,99,1
+380040,"Italy, Lombardy, South, Pavia (2008-2010)",,5,99,1
+380021,"Italy, Mantua (2008-2010)",,5,99,1
+380026,"Italy, Milan (2008-2012)",,5,99,1
+380010,"Italy, Modena (2008-2012)",,5,99,1
+380047,"Italy, Monza (2008-2012)",,5,99,1
+380016,"Italy, Naples (2008-2012)",,5,99,1
+380031,"Italy, Nuoro (2008-2012)",,5,99,1
+380033,"Italy, Palermo (2008-2012)",,5,99,1
+380005,"Italy, Parma (2008-2012)",,5,99,1
+380048,"Italy, Piacenza (2008-2011)",,5,99,1
+380006,"Italy, Ragusa and Caltanissetta (2008-2012)",,5,99,1
+380023,"Italy, Reggio Emilia (2008-2012)",,5,99,1
+380007,"Italy, Romagna (2008-2012)",,5,99,1
+380015,"Italy, Sassari (2008-2011)",,5,99,1
+380028,"Italy, Sondrio (2008-2012)",,5,99,1
+380034,"Italy, South Tyrol (2008-2010)",,5,99,1
+380029,"Italy, Syracuse (2008-2012)",,5,99,1
+380049,"Italy, Taranto (2008-2011)",,5,99,1
+380019,"Italy, Trento (2008-2010)",,5,99,1
+380008,"Italy, Turin (2008-2012)",,5,99,1
+380014,"Italy, Umbria (2008-2011)",,5,99,1
+380004,"Italy, Varese (2008-2012)",,5,99,1
+380013,"Italy, Veneto (2008-2010)",,5,99,1
+428000,Latvia (2010-2012),,5,99,1
+440000,Lithuania (2008-2012),,5,99,1
+470000,Malta (2008-2012),,5,99,1
+528000,The Netherlands (2008-2012),*,5,99,1
+578000,Norway (2008-2012),,5,99,1
+616007,"Poland, Kielce (2008-2012)",,5,99,1
+616002,"Poland, Lower Silesia (2008-2012)",,5,99,1
+616011,"Poland, Lublin (2008-2012)",*,5,99,1
+616012,"Poland, Podkarpackie (2008-2012)",,5,99,1
+616010,"Poland, Poznan (2008-2012)",,5,99,1
+620005,"Portugal, Azores (2008-2011)",,5,99,1
+643006,"Russian Federation, Arkhangelsk (2008-2012)",,5,99,1
+643005,"Russian Federation, Chelyabinsk (2008-2012)",,5,99,1
+643003,"Russian Federation, Karelia (2008-2012)",*,5,99,1
+643004,"Russian Federation, Samara (2008-2012)",,5,99,1
+703000,Slovakia (2008-2010),,5,99,1
+705000,Slovenia (2008-2012),,5,99,1
+724009,"Spain, Albacete (2008-2010)",,5,99,1
+724005,"Spain, Asturias (2008-2010)",,5,99,1
+724006,"Spain, Basque Country (2008-2012)",,5,99,1
+724011,"Spain, Canary Islands (2008-2011)",,5,99,1
+724015,"Spain, Castellón (2008-2012)",,5,99,1
+724016,"Spain, Ciudad Real (2008-2011)",,5,99,1
+724013,"Spain, Cuenca (2008-2011)",,5,99,1
+724010,"Spain, Girona (2008-2012)",,5,99,1
+724002,"Spain, Granada (2008-2012)",,5,99,1
+724014,"Spain, La Rioja (2008-2012)",,5,99,1
+724008,"Spain, Mallorca (2008-2011)",,5,99,1
+724003,"Spain, Murcia (2008-2010)",,5,99,1
+724004,"Spain, Navarra (2008-2010)",,5,99,1
+724001,"Spain, Tarragona (2008-2012)",,5,99,1
+756012,"Switzerland, Fribourg (2008-2012)",,5,99,1
+756002,"Switzerland, Geneva (2008-2012)",,5,99,1
+756011,"Switzerland, Graubünden and Glarus (2008-2012)",,5,99,1
+756003,"Switzerland, Neuchâtel (2008-2012)",,5,99,1
+756004,"Switzerland, St Gall-Appenzell (2008-2012)",,5,99,1
+756010,"Switzerland, Ticino (2008-2012)",,5,99,1
+756008,"Switzerland, Valais (2008-2012)",,5,99,1
+756005,"Switzerland, Vaud (2008-2012)",,5,99,1
+756006,"Switzerland, Zurich (2008-2012)",,5,99,1
+804000,Ukraine (2008-2012),,5,99,1
+826000,United Kingdom (2008-2012),,5,99,1
+826001,"UK, England (2008-2012)",,5,99,0
+826011,"UK, England, East (2008-2012)",,5,99,0
+826007,"UK, England, East Midlands (2008-2012)",,5,99,0
+826015,"UK, England, London (2008-2012)",,5,99,0
+826009,"UK, England, North East (2008-2012)",,5,99,0
+826003,"UK, England, North West (2008-2012)",,5,99,0
+826006,"UK, England, South West (2008-2012)",,5,99,0
+826004,"UK, England, South East (2008-2012)",,5,99,0
+826002,"UK, England, West Midlands (2008-2012)",,5,99,0
+826010,"UK, England, Yorkshire and The Humber (2008-2012)",,5,99,0
+826030,"UK, Northern Ireland (2008-2012)",,5,99,0
+826020,"UK, Scotland (2008-2012)",,5,99,0
+826040,"UK, Wales (2008-2012)",,5,99,0
+36000,Australia (2008-2012),,6,99,1
+36001,Australian Capital Territory (2008-2012),,6,99,0
+36002,"Australia, New South Wales (2008-2012)",,6,99,0
+36008,"Australia, Northern Territory (2008-2012)",,6,99,0
+36008,"Australia, Northern Territory: Non-Indigenous (2008-2012)",,6,63,0
+36008,"Australia, Northern Territory: Indigenous (2008-2012)",,6,62,0
+36003,"Australia, Queensland (2008-2012)",,6,99,0
+36004,South Australia (2008-2012),,6,99,0
+36005,"Australia, Tasmania (2008-2012)",,6,99,0
+36006,"Australia, Victoria (2008-2012)",,6,99,0
+36007,Western Australia (2008-2012),,6,99,0
+250093,New Caledonia (2008-2011),*,6,99,1
+554000,New Zealand (2008-2012),,6,99,1
+554000,New Zealand: Maori (2008-2012),*,6,28,0
+554000,New Zealand: Pacific Islander (2008-2012),*,6,29,0
+840099,"USA, Hawaii (2008-2012)",,6,99,0
+840099,"USA, Hawaii: White (2008-2012)",*,6,10,0
+840099,"USA, Hawaii: Japanese (2008-2012)",*,6,21,0
+840099,"USA, Hawaii: Chinese (2008-2012)",*,6,20,0
+840099,"USA, Hawaii: Hawaiian (2008-2012)",*,6,45,0
+840099,"USA, Hawaii: Filipino (2008-2012)",*,6,23,0
+840098,"USA, Pacific Islands (2008-2012)",*,6,99,0

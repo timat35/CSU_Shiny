@@ -1,0 +1,1 @@
+Rscript.exe  "\\inti\CIN\Xchange\Mathieu\CI5_shiny\CI5_registry_graph.R" 
