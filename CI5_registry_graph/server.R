@@ -19,19 +19,19 @@ shinyServer(function(input, output, session) {
   # file_utf8 <- ""
   
 #Change for shinyappio: 
-  # source("source/Rcan_core.r")
-  # file_cancer_color <- "data/color_cancer.csv"
-  # file_data <- "data/"
-  # file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
-  # file_utf8 <- "_UTF8"
+  source("source/Rcan_core.r")
+  file_cancer_color <- "data/color_cancer.csv"
+  file_data <- "data/"
+  file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
+  file_utf8 <- "_UTF8"
 
   
 #to test
-  input <- list()
-  input$select_registry <- 12001
-  input$select_registry <- 12
-  input$select_format <- "pdf"
-  input$text_filename <- "test"
+  # input <- list()
+  # input$select_registry <- 12001
+  # input$select_registry <- 12
+  # input$select_format <- "pdf"
+  # input$text_filename <- "test"
   
   
   graph_width <- 8
