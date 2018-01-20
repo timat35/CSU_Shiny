@@ -1,3 +1,8 @@
+# ignore R package and powerpoint generate
+pkg/
+ppt/
+
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
