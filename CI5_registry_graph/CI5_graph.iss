@@ -5,14 +5,14 @@
 #define IncludeR false
 #define PandocVersion "1.17.2"
 #define IncludePandoc false
-#define IncludeChrome true
+#define IncludeChrome false
 #define MyAppPublisher ""
 #define MyAppURL ""
 
 [Setup]
 AppName = {#MyAppName}
-AppId = {{RCIVAHLF-YTNI-WVQ8-M8ZI-WX8SH4T29WL6}
-DefaultDirName = {c:\CI5_graph}\{#MyAppName}
+AppId = {{0YYEP9AQ-J8NH-20IW-0RO1-SD5DGRNI1FXV}
+DefaultDirName = {userdocs}\{#MyAppName}
 DefaultGroupName = {#MyAppName}
 OutputDir = RInno_installer
 OutputBaseFilename = setup_{#MyAppName}
