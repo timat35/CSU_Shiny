@@ -43,8 +43,9 @@ shinyServer(function(input, output, session) {
   
   #reactive values init
   values <- reactiveValues(doc = NULL, nb_slide = 0, text= "Slide included")
-  bool_rv <- reactiveValues(progress_bar = FALSE, trigger=TRUE)
+  bool_rv <- reactiveValues(trigger=FALSE)
   registry_info <- reactiveValues(data=NULL, label ="")
+  progress_bar <- reactiveValues(object=NULL)
   
   
   
@@ -162,17 +163,25 @@ shinyServer(function(input, output, session) {
   output$UI_control4 <- renderUI({
     
     if (input$select_table=="Top cancer") {
-      if (!is.null(input$radioValue )) {
-        if (input$radioValue == "cum") {
-          
-          sliderInput("slideAgeRange", "Age group:", 0, 75, c(0,90), step=5)
-        } else {
-          sliderInput("slideAgeRange", "Age group:", 0, 90, c(0,90), step=5)
-        }}
+      sliderInput("slideAgeRange", "Age group:", 0, 90, c(0,90), step=5)
+    }
+  })
+
+  observeEvent(input$radioValue , {
+
+    
+    if (input$radioValue == "cum") {
+      vals <- 75
+    } else {
+      vals <- 90
     }
     
+    # If the slide range value are not update, the trigger is turn on, so the graph will be update
+    bool_rv$trigger = input$slideAgeRange[2] == vals
+    updateSliderInput(session, "slideAgeRange", "Age group:", value=c(0,90), min=0, max=vals,step=5)
+    
   })
-  
+    
   
   observeEvent(input$select_table,{
     
@@ -215,13 +224,6 @@ shinyServer(function(input, output, session) {
   
   #Select CI5
   dt_CI5 <- reactive ({
-		
-    # if (!isolate(bool_rv$progress_bar)) {
-    #   progress_bar <- Progress$new(session, min=0, max=100)
-    #   bool_rv$progress_bar = TRUE
-    # }  
-
-    # progress_bar$set(value = 0, message = 'loading CI5 XI data')
 
   	if (input$check_country) {
   	  var_code <- "country_code"
@@ -233,6 +235,8 @@ shinyServer(function(input, output, session) {
   	  fileRDS <- "CI5XI.rds"
   	  
   	}
+    
+    isolate(progress_bar$object)$set(value = 10, message = 'Please wait:', detail = 'Load CI5 XI data')
   	
   	dt_temp <- data.table(readRDS(paste0(file_data, fileRDS)))
   	
@@ -252,18 +256,13 @@ shinyServer(function(input, output, session) {
   #select registry
   dt_select <- reactive({ 
     
-   # print(is.object(progress_bar))
-   #  
-   #  if (!isolate(bool_rv$progress_bar)) {
-   #    progress_bar <- Progress$new(session, min=0, max=100)
-   #    bool_rv$progress_bar = TRUE
-   #  }
-   #  
-   #  progress_bar$set(value = 20, message = 'Select registry or country')
-   # 
+
     if (!is.null(input$select_registry)) {
       
       if (input$select_registry %in% dt_CI5()$registry) {
+        
+        isolate(progress_bar$object)$set(value = 20, message = 'Please wait:', detail = 'Select registry or country')
+        
         dt_temp<- dt_CI5()[registry == input$select_registry]
        
         registry_info$label <- isolate(registry_info$data)[registry==input$select_registry,]$registry_lab
@@ -295,13 +294,8 @@ shinyServer(function(input, output, session) {
     
     
     if (!is.null(dt_select())) {
-	  
-      # if (!isolate(bool_rv$progress_bar)) {
-      #   progress_bar <- Progress$new(session, min=0, max=100)
-      #   bool_rv$progress_bar = TRUE
-      # }
-      # 
-      # progress_bar$set(value = 30, message = 'Calculate statistics')
+	    
+      isolate(progress_bar$object)$set(value = 30, message = 'Please wait:', detail = 'Calculate statistics')
       
       if (input$select_table=="Population pyramid") {
         
@@ -361,50 +355,60 @@ shinyServer(function(input, output, session) {
       } 
       else if (input$select_table=="Top cancer") {
         
-          if (!is.null(input$slideAgeRange)) {
-            dt_temp <- dt_select()$data
+        if (!is.null(input$slideAgeRange)) {
             
-            dt_temp <- dt_temp[cancer != 63,]
-            dt_temp <- dt_temp[cancer != 62,]
-            dt_temp <- dt_temp[cancer != 25,]
             
-            group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
-            dt_temp <-  dt_temp[,list(cases=sum(cases), py=sum(py)), by=group_by]
-            dt_temp$sex <- factor(dt_temp$sex, levels=c(1,2), labels=c("Male", "Female"))
-            dt_temp[, cancer :=factor(cancer)]
+           
+          dt_temp <- dt_select()$data
+          
+          dt_temp <- dt_temp[cancer != 63,]
+          dt_temp <- dt_temp[cancer != 62,]
+          dt_temp <- dt_temp[cancer != 25,]
+          
+          group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
+          dt_temp <-  dt_temp[,list(cases=sum(cases), py=sum(py)), by=group_by]
+          dt_temp$sex <- factor(dt_temp$sex, levels=c(1,2), labels=c("Male", "Female"))
+          dt_temp[, cancer :=factor(cancer)]
+          
+          first_age <- (input$slideAgeRange[1]/5)+1
+          last_age <- input$slideAgeRange[2]/5
+          
+          if (last_age >= dt_select()$max_age) last_age <- 18
+          
+          if (isolate(input$radioValue) == "cum") {
             
-            first_age <- (input$slideAgeRange[1]/5)+1
-            last_age <- input$slideAgeRange[2]/5
+            if (last_age > 15) last_age <-15
             
-            if (last_age >= dt_select()$max_age) last_age <- 18
-            
-            if (isolate(input$radioValue) == "cum") {
-              
-              if (last_age > 15) last_age <-15
-              
-              dt_temp <- csu_cum_risk_core(df_data =dt_temp,
-                                           var_age="age", var_cases="cases", var_py="py",
-                                           group_by = c("cancer", "cancer_lab", "sex"), 
-                                           missing_age = 19,
-                                           age_label_list = NULL,
-                                           last_age= last_age)
-  
-              
-            } 
-            else {
-            
-              dt_temp <- Rcan:::core.csu_asr(df_data =dt_temp,
-                                 var_age="age", var_cases="cases", var_py="py",
-                                 group_by = c("cancer", "cancer_lab", "sex"), 
-                                 first_age = first_age,
-                                 last_age= last_age,
-                                 missing_age = 19)
-              
-            }
-          }
+            dt_temp <- csu_cum_risk_core(df_data =dt_temp,
+                                         var_age="age", var_cases="cases", var_py="py",
+                                         group_by = c("cancer", "cancer_lab", "sex"), 
+                                         missing_age = 19,
+                                         age_label_list = NULL,
+                                         last_age= last_age)
+
+          } 
           else {
-            dt_temp <- NULL
+          
+            dt_temp <- Rcan:::core.csu_asr(df_data =dt_temp,
+                               var_age="age", var_cases="cases", var_py="py",
+                               group_by = c("cancer", "cancer_lab", "sex"), 
+                               first_age = first_age,
+                               last_age= last_age,
+                               missing_age = 19)
+            
           }
+          
+          print("\nafter calcul\n")
+          print(bool_rv$trigger)
+          
+          if (bool_rv$trigger) {
+            bool_rv$trigger <- FALSE
+          }
+
+        }
+        else {
+          dt_temp <- NULL
+        }
        
       }
       else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
@@ -432,25 +436,25 @@ shinyServer(function(input, output, session) {
 
   #Render plot
   output$plot <- renderPlot({ 
+    
+    progress_bar$object <- Progress$new(session, min=0, max=100)
+    on.exit(progress_bar$object$close())
 
     if (!is.null(dt_all()))  {
       
-      #if (!isolate(bool_rv$progress_bar)) {
-      #  progress_bar <- Progress$new(session, min=0, max=100)
-      #  bool_rv$progress_bar = TRUE
-      #}
+      isolate(progress_bar$object)$set(value = 60,  message = 'Please wait:', detail = 'Render graph')
       
-      #progress_bar$set(value = 60, message = 'Render graph')
       
       if (isolate(input$select_table)=="Population pyramid") {
         
-        
+
         canreg_population_pyramid(dt_all(), var_bar = "age_group_label",group_by = "sex",var_age_cut="age",canreg_header = isolate(registry_info$label))
         
       } 
       else if (isolate(input$select_table)=="Barchart of cases by age") {
         
         skin <- FALSE
+        
         
         canreg_cases_age_bar(
           df_data=dt_all(),
@@ -559,13 +563,6 @@ shinyServer(function(input, output, session) {
       
 
     }
-    
-    # if (isolate(bool_rv$progress_bar)) {
-    #   bool_rv$progress_bar <- FALSE
-    #   progress_bar$close()
-    #   
-    #   
-    # }
     
   })
   

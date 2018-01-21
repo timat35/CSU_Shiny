@@ -11,7 +11,7 @@
 
 [Setup]
 AppName = {#MyAppName}
-AppId = {{0YYEP9AQ-J8NH-20IW-0RO1-SD5DGRNI1FXV}
+AppId = {{ZZSF7CPU-FNYV-YNXW-JQIQ-2BK0IATOM738}
 DefaultDirName = {userdocs}\{#MyAppName}
 DefaultGroupName = {#MyAppName}
 OutputDir = RInno_installer

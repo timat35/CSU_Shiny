@@ -1,7 +1,7 @@
-This message will display on the last page of your setup wizard.
+This application is design to support CSU group.
 
+Please report any bugs, errors, but also wanted fonctionality, idea, critics to
+laversannem@gmail.com
 
-
-
-
-Icons made by Vectors Market from Flaticon are licensed by Creative Commons BY 3.0
+Thanks, 
+Mathieu Laversanne

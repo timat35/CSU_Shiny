@@ -54,7 +54,8 @@ rsconnect::showLogs(streaming = TRUE)
 
 ################ Rinno #######################
 #Rinno installation without or R include
-install.packages("RInno") 
+#install.packages("RInno") 
+.libPaths( "C:/Users/laversannem/Documents/R/win-library/3.4")
 library(RInno)
 
 setwd("C:\\CSU_shiny\\CI5_registry_graph")
@@ -76,10 +77,12 @@ shiny::runApp()
 ############# App reactive values dependencies information ####
 
 renderPlot() <- dt_all(), input$slideNbTopBar, input$radioLog, input$slideNbTopAgeSpe
-dt_all() <- dt_select(), input$select_table, input$radioAgeGroup, input$slideAgeRange
-dt_select() <- dt_CI5(), input$select_registry
-dt_CI5() <- input$check_country
-input$select_registry <- input$select_continent, registry_info$data,  input$check_country
+  dt_all() <- dt_select(), input$select_table, input$radioAgeGroup, input$slideAgeRange, rv$trigger
+    dt_select() <- dt_CI5(), input$select_registry
+      dt_CI5() <- input$check_country
 
-input$slideAgeRange <- input$radioValue
+      input$select_registry <- input$select_continent, registry_info$data,  input$check_country
+
+  input$slideAgeRange <- input$radioValue
+  rv$trigger <- input$radioValue
 
