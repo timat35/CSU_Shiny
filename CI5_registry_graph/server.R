@@ -1,4 +1,12 @@
 
+
+#to test
+# input <- list()
+# input$select_registry <- 12001
+# input$select_registry <- 12
+# input$select_format <- "pdf"
+# input$text_filename <- "test"
+
 shinyServer(function(input, output, session) {
 
   #app close when the session is stopped  
@@ -6,49 +14,8 @@ shinyServer(function(input, output, session) {
     stopApp()
   })
   
-
-#Change for local network app: 
-  # app_folder <- paste0(app_folder, "/CI5_registry_graph")
-  # source(paste(sep="/", app_folder, "source/Rcan_core.r"))
-  # file_cancer_color <- paste0(app_folder, "/data/color_cancer.csv")
-  # file_data <- paste0(app_folder, "/data/")
-  # file_pptx <- paste(sep="/", app_folder,"slide_template", "shiny_template.pptx")
-  # file_utf8 <- ""
   
-#Change for shinyappio: 
-  source("source/Rcan_core.r")
-  file_cancer_color <- "data/color_cancer.csv"
-  file_data <- "data/"
-  file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
-  #file_utf8 <- "_UTF8"
-  
-#if Rinno installation: 
-  file_utf8 <- ""
-
-  
-#to test
-  # input <- list()
-  # input$select_registry <- 12001
-  # input$select_registry <- 12
-  # input$select_format <- "pdf"
-  # input$text_filename <- "test"
-  
-  #Parametre and fixed variable
-  
-  graph_width <- 8
-  graph_width_vertical <- 4
   nb_package <- 6
-  
-  dt_cancer_color <- data.table(read.csv(file_cancer_color))
-  
-  #reactive values init
-  values <- reactiveValues(doc = NULL, nb_slide = 0, text= "Slide included")
-  bool_rv <- reactiveValues(trigger=FALSE)
-  registry_info <- reactiveValues(data=NULL, label ="")
-  progress_bar <- reactiveValues(object=NULL)
-  
-  
-  
   #Loading packages
   withProgress(message = 'loading package', value = 0, {
     incProgress(0, detail="data.table")
@@ -66,6 +33,33 @@ shinyServer(function(input, output, session) {
     incProgress(1/nb_package, detail="Done")
     
   })
+  
+
+  source("source/Rcan_core.r")
+  file_cancer_color <- "data/color_cancer.csv"
+  file_data <- "data/"
+  file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
+  file_utf8 <- ""
+  
+  #Change for shinyappio: 
+  #file_utf8 <- "_UTF8"
+  
+  
+  #Parametre and fixed variable
+  
+  graph_width <- 8
+  graph_width_vertical <- 4
+  
+  dt_cancer_color <- data.table(read.csv(file_cancer_color))
+  
+  #reactive values init
+  values <- reactiveValues(doc = NULL, nb_slide = 0, text= "Slide included")
+  bool_rv <- reactiveValues(trigger=FALSE)
+  registry_info <- reactiveValues(data=NULL, label ="")
+  progress_bar <- reactiveValues(object=NULL)
+  
+
+
 
   
   #UI controller

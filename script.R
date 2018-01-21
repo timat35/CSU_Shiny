@@ -36,6 +36,7 @@ devtools::install_github("timat35/Rcan", subdir="Rcan")
 .libPaths( "C:/Users/laversannem/Documents/R/win-library/3.4")
 install.packages('rsconnect')
 
+library(rsconnect)
 
 
 # deploy app on shinyapp.io
