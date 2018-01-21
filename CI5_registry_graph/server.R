@@ -1,10 +1,7 @@
 
-
-
-
-
 shinyServer(function(input, output, session) {
-  
+
+  #app close when the session is stopped  
   session$onSessionEnded(function() {
     stopApp()
   })
@@ -36,12 +33,22 @@ shinyServer(function(input, output, session) {
   # input$select_format <- "pdf"
   # input$text_filename <- "test"
   
+  #Parametre and fixed variable
   
   graph_width <- 8
   graph_width_vertical <- 4
   nb_package <- 6
-
   
+  dt_cancer_color <- data.table(read.csv(file_cancer_color))
+  
+  #reactive values init
+  values <- reactiveValues(doc = NULL, nb_slide = 0, text= "Slide included")
+  bool_rv <- reactiveValues(progress_bar = FALSE, trigger=TRUE)
+  registry_info <- reactiveValues(data=NULL, label ="")
+  
+  
+  
+  #Loading packages
   withProgress(message = 'loading package', value = 0, {
     incProgress(0, detail="data.table")
     library(data.table)
@@ -58,106 +65,51 @@ shinyServer(function(input, output, session) {
     incProgress(1/nb_package, detail="Done")
     
   })
-  
 
   
-  dt_cancer_color <- data.table(read.csv(file_cancer_color))
-  
-  values <- reactiveValues(doc = NULL, nb_slide = 0, text= "Slide included")
-  rv <- reactiveValues(trigger=TRUE)
-  registry_info <- reactiveValues(data=NULL, label ="")
-  
-  
- 
-  dt_CI5 <- reactive ({
-		
-	 withProgress(message = 'loading CI5 XI data', value = 0, {
-	
-	if (input$check_country) {
-	  var_code <- "country_code"
-	  var_label <- "country_label"
-	  fileRDS <- "CI5XI_country.rds"
-	} else {
-	  var_code <- "registry"
-	  var_label <- "registry_lab"
-	  fileRDS <- "CI5XI.rds"
-	  
-	}
-	
-	dt_temp <- data.table(readRDS(paste0(file_data, fileRDS)))
-	
-	setnames(dt_temp,var_code,"registry"  )
-	setnames(dt_temp,var_label,"registry_lab"  )
-	
-	#sex specific sites
-	
-	dt_temp[sex == 1 & cancer %in% 29:36, cases := 0]
-	dt_temp[sex == 2 & cancer %in% 38:41, cases := 0]
-	
-	
-	return(dt_temp)
-    })
+  #UI controller
+  output$UI_registry <- renderUI({
+    
+    if (input$check_country) {
+      fileCSV <- paste0("country_list", file_utf8, ".csv")
+      title <- "Country"
+    } else {
+      fileCSV <-  paste0("registry_list", file_utf8, ".csv")
+      title <- "Registry"
+    }
+    
+    dt_list <- read.csv(paste0(file_data, fileCSV))
+    dt_list <- dt_list[dt_list$continent_lab == input$select_continent,]
+    
+    registry_list <- list()
+    for (i in 1:nrow(dt_list)) {
+      registry_list[[as.character(dt_list$registry_lab[i])]] <- dt_list$registry[i]
+    }
+    
+    registry_info$data <- data.table(dt_list)
+    selectInput("select_registry", title,registry_list)
+    
   })
   
-  
-  #select registry
-  dt_select <- reactive({ 
+  output$UI_nbSlide <- renderUI({
     
-    withProgress(message = 'Select registry or country', value = 0, {
+    
+    if (values$nb_slide == 0) {
       
-      if (!is.null(input$select_registry)) {
-        
-        if (input$select_registry %in% dt_CI5()$registry) {
-          dt_temp<- dt_CI5()[registry == input$select_registry]
-         
-          registry_info$label <- registry_info$data[registry==input$select_registry,]$registry_lab
-          
-          
-          #drop population for missing age
-          dt_temp <- dt_temp[age==19, py:=0]
-          
-          #create age group label
-          dt_temp[py>0, age_group_label:=paste0((age-1)*5, "-", (age*5)-1)]
-          
-          
-          dt_temp[py>0 ,temp_max:=max(age)]
-          dt_temp[age==temp_max ,age_group_label:=paste0((age-1)*5, "+")]
-          
-          max_age <- max(dt_temp[py >0,]$age)
-          
-          
-          return(list(data=dt_temp, max_age=max_age))
-        }
-      }
-      else {
-        return(NULL)
-      }
-    })
+      
+      
+      values$text <- "Slide included:"
+    } else {
+      
+      values$text <- paste0(isolate(values$text), '<br>',paste0(isolate(registry_info$label), " ", isolate(input$select_table)))
+      
+    }
+    
+    tags$div(id="divSlidelist", class="mat_text", checked=NA,
+             tags$p(HTML(isolate(values$text)))
+    )
     
   })
-  
-  
-  
-  observeEvent(input$select_table,{
-    
-    if (input$select_table=="Population pyramid") {
-      hide(id="controls_COL1", anim=TRUE)
-      hide(id="controls_COL2", anim=TRUE)
-    } 
-    else if (input$select_table=="Barchart of cases by age") {
-      show(id="controls_COL1", anim=TRUE)
-      hide(id="controls_COL2", anim=TRUE)
-    }
-    else if (input$select_table=="Top cancer") {
-      show(id="controls_COL1", anim=TRUE)
-      show(id="controls_COL2", anim=TRUE)
-    }
-    else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
-      show(id="controls_COL1", anim=TRUE)
-      show(id="controls_COL2", anim=TRUE)
-    }
-  })
-  
   
   output$UI_control1 <- renderUI({
     
@@ -191,11 +143,11 @@ shinyServer(function(input, output, session) {
   
   output$UI_control3 <- renderUI({
     
-   
-    if (input$select_table=="Top cancer") {
     
+    if (input$select_table=="Top cancer") {
+      
       sliderInput("slideNbTopBar", "Number of cancer sites:", 3, 20, 10)
-     
+      
       
     } 
     else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
@@ -211,58 +163,35 @@ shinyServer(function(input, output, session) {
     
     if (input$select_table=="Top cancer") {
       if (!is.null(input$radioValue )) {
-      if (input$radioValue == "cum") {
-
-        sliderInput("slideAgeRange", "Age group:", 0, 75, c(0,90), step=5)
+        if (input$radioValue == "cum") {
+          
+          sliderInput("slideAgeRange", "Age group:", 0, 75, c(0,90), step=5)
         } else {
-        sliderInput("slideAgeRange", "Age group:", 0, 90, c(0,90), step=5)
-      }}
+          sliderInput("slideAgeRange", "Age group:", 0, 90, c(0,90), step=5)
+        }}
     }
     
   })
   
-  output$UI_registry <- renderUI({
-    	
-    if (input$check_country) {
-      fileCSV <- paste0("country_list", file_utf8, ".csv")
-      title <- "Country"
-    } else {
-      fileCSV <-  paste0("registry_list", file_utf8, ".csv")
-      title <- "Registry"
-    }
-    
-    dt_list <- read.csv(paste0(file_data, fileCSV))
-    dt_list <- dt_list[dt_list$continent_lab == input$select_continent,]
-    
-    registry_list <- list()
-    for (i in 1:nrow(dt_list)) {
-      registry_list[[as.character(dt_list$registry_lab[i])]] <- dt_list$registry[i]
-    }
-    
-    registry_info$data <- data.table(dt_list)
-
-    selectInput("select_registry", title,registry_list)
-    
-  })
   
-  output$UI_nbSlide <- renderUI({
+  observeEvent(input$select_table,{
     
-
-    if (values$nb_slide == 0) {
-      
-      
-
-      values$text <- "Slide included:"
-    } else {
-      
-      values$text <- paste0(isolate(values$text), '<br>',paste0(isolate(registry_info$label), " ", isolate(input$select_table)))
-      
+    if (input$select_table=="Population pyramid") {
+      hide(id="controls_COL1", anim=TRUE)
+      hide(id="controls_COL2", anim=TRUE)
+    } 
+    else if (input$select_table=="Barchart of cases by age") {
+      show(id="controls_COL1", anim=TRUE)
+      hide(id="controls_COL2", anim=TRUE)
     }
-  
-    tags$div(id="divSlidelist", class="mat_text", checked=NA,
-             tags$p(HTML(isolate(values$text)))
-             )
-
+    else if (input$select_table=="Top cancer") {
+      show(id="controls_COL1", anim=TRUE)
+      show(id="controls_COL2", anim=TRUE)
+    }
+    else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+      show(id="controls_COL1", anim=TRUE)
+      show(id="controls_COL2", anim=TRUE)
+    }
   })
   
   observeEvent(values$nb_slide,{
@@ -282,13 +211,97 @@ shinyServer(function(input, output, session) {
   })
   
 
+  #Data management
   
+  #Select CI5
+  dt_CI5 <- reactive ({
+		
+    # if (!isolate(bool_rv$progress_bar)) {
+    #   progress_bar <- Progress$new(session, min=0, max=100)
+    #   bool_rv$progress_bar = TRUE
+    # }  
+
+    # progress_bar$set(value = 0, message = 'loading CI5 XI data')
+
+  	if (input$check_country) {
+  	  var_code <- "country_code"
+  	  var_label <- "country_label"
+  	  fileRDS <- "CI5XI_country.rds"
+  	} else {
+  	  var_code <- "registry"
+  	  var_label <- "registry_lab"
+  	  fileRDS <- "CI5XI.rds"
+  	  
+  	}
+  	
+  	dt_temp <- data.table(readRDS(paste0(file_data, fileRDS)))
+  	
+  	setnames(dt_temp,var_code,"registry"  )
+  	setnames(dt_temp,var_label,"registry_lab"  )
+  	
+  	#sex specific sites
+  	
+  	dt_temp[sex == 1 & cancer %in% 29:36, cases := 0]
+  	dt_temp[sex == 2 & cancer %in% 38:41, cases := 0]
+  	
+  	return(dt_temp)
+
+  })
+  
+  
+  #select registry
+  dt_select <- reactive({ 
+    
+   # print(is.object(progress_bar))
+   #  
+   #  if (!isolate(bool_rv$progress_bar)) {
+   #    progress_bar <- Progress$new(session, min=0, max=100)
+   #    bool_rv$progress_bar = TRUE
+   #  }
+   #  
+   #  progress_bar$set(value = 20, message = 'Select registry or country')
+   # 
+    if (!is.null(input$select_registry)) {
+      
+      if (input$select_registry %in% dt_CI5()$registry) {
+        dt_temp<- dt_CI5()[registry == input$select_registry]
+       
+        registry_info$label <- isolate(registry_info$data)[registry==input$select_registry,]$registry_lab
+        
+        #drop population for missing age
+        dt_temp <- dt_temp[age==19, py:=0]
+        
+        #create age group label
+        dt_temp[py>0, age_group_label:=paste0((age-1)*5, "-", (age*5)-1)]
+        
+        
+        dt_temp[py>0 ,temp_max:=max(age)]
+        dt_temp[age==temp_max ,age_group_label:=paste0((age-1)*5, "+")]
+        
+        max_age <- max(dt_temp[py >0,]$age)
+        
+        
+        return(list(data=dt_temp, max_age=max_age))
+      }
+    }
+    else {
+      return(NULL)
+    }
+
+  })
+  
+  #Calcul statistics
   dt_all <-  reactive({ 
     
     
     if (!is.null(dt_select())) {
-	
-	withProgress(message = 'Calculate statistics', value = 0, {
+	  
+      # if (!isolate(bool_rv$progress_bar)) {
+      #   progress_bar <- Progress$new(session, min=0, max=100)
+      #   bool_rv$progress_bar = TRUE
+      # }
+      # 
+      # progress_bar$set(value = 30, message = 'Calculate statistics')
       
       if (input$select_table=="Population pyramid") {
         
@@ -348,10 +361,6 @@ shinyServer(function(input, output, session) {
       } 
       else if (input$select_table=="Top cancer") {
         
-
-        
-
-
           if (!is.null(input$slideAgeRange)) {
             dt_temp <- dt_select()$data
             
@@ -369,7 +378,7 @@ shinyServer(function(input, output, session) {
             
             if (last_age >= dt_select()$max_age) last_age <- 18
             
-            if (input$radioValue == "cum") {
+            if (isolate(input$radioValue) == "cum") {
               
               if (last_age > 15) last_age <-15
               
@@ -397,10 +406,6 @@ shinyServer(function(input, output, session) {
             dt_temp <- NULL
           }
        
-        
-        
-        
-        
       }
       else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
         
@@ -418,7 +423,6 @@ shinyServer(function(input, output, session) {
       
       return(dt_temp)
       
-    })
 	}
     else {
       return(NULL)
@@ -426,19 +430,25 @@ shinyServer(function(input, output, session) {
   })
   
 
-  
-  output$plot <- renderPlot({
+  #Render plot
+  output$plot <- renderPlot({ 
 
     if (!is.null(dt_all()))  {
       
-      withProgress(message = 'Render graph', value = 0, {
-      if (input$select_table=="Population pyramid") {
+      #if (!isolate(bool_rv$progress_bar)) {
+      #  progress_bar <- Progress$new(session, min=0, max=100)
+      #  bool_rv$progress_bar = TRUE
+      #}
+      
+      #progress_bar$set(value = 60, message = 'Render graph')
+      
+      if (isolate(input$select_table)=="Population pyramid") {
         
         
         canreg_population_pyramid(dt_all(), var_bar = "age_group_label",group_by = "sex",var_age_cut="age",canreg_header = isolate(registry_info$label))
         
       } 
-      else if (input$select_table=="Barchart of cases by age") {
+      else if (isolate(input$select_table)=="Barchart of cases by age") {
         
         skin <- FALSE
         
@@ -451,7 +461,7 @@ shinyServer(function(input, output, session) {
           skin=skin)
         
       } 
-      else if (input$select_table=="Top cancer") {
+      else if (isolate(input$select_table)=="Top cancer") {
         
         
         nb_top <- input$slideNbTopBar
@@ -468,21 +478,21 @@ shinyServer(function(input, output, session) {
           }
           
 
-          if (input$radioValue == "asr") {
+          if (isolate(input$radioValue) == "asr") {
             var_top <- "asr"
             digit <- 1
             ytitle <- paste0("Age-standardized incidence rate per ", formatC(100000, format="d", big.mark=","), ", ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
             
           
           } 
-          else if (input$radioValue == "cases"){
+          else if (isolate(input$radioValue) == "cases"){
             var_top <- "cases"
             digit <- 0
             ytitle <-  paste0("Number of cases, ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
             
             
           }
-          else if (input$radioValue == "cum") {
+          else if (isolate(input$radioValue) == "cum") {
             var_top <- "cum_risk"
             digit <- 2
             if (last_age >= 15) {
@@ -508,7 +518,7 @@ shinyServer(function(input, output, session) {
         }
         
       }
-      else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+      else if (isolate(input$select_table)=="Age-specific rates (Top Cancer Sites)") {
        
 
 
@@ -547,11 +557,19 @@ shinyServer(function(input, output, session) {
         
       }
       
-    })
-	}
+
+    }
+    
+    # if (isolate(bool_rv$progress_bar)) {
+    #   bool_rv$progress_bar <- FALSE
+    #   progress_bar$close()
+    #   
+    #   
+    # }
     
   })
   
+  #Download file
   output$downloadFile <- downloadHandler(
     
     filename = function() {
@@ -711,6 +729,7 @@ shinyServer(function(input, output, session) {
      
     })
   
+  #Action button: Add slide
   observeEvent(
     input$actionSlide,
     { 
@@ -867,8 +886,7 @@ shinyServer(function(input, output, session) {
 
   )
   
-  
-  
+  #Download presentation
   output$downloadPres <- downloadHandler(
     filename = function() {
       paste0(input$pptx_filename, ".", "pptx")
