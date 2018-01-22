@@ -62,6 +62,7 @@ shinyServer(function(input, output, session) {
   registry_info <- reactiveValues(data=NULL, label ="")
   progress_bar <- reactiveValues(object=NULL)
   cancer_group <- reactiveValues(select = "ci5")
+  table <- reactiveValues(label="")
   
 
 
@@ -101,7 +102,7 @@ shinyServer(function(input, output, session) {
       values$text <- "Slide included:"
     } else {
       
-      values$text <- paste0(isolate(values$text), '<br>',paste0(isolate(registry_info$label), " ", isolate(input$select_table)))
+      values$text <- paste0(isolate(values$text), '<br>',paste0(isolate(registry_info$label), " ", isolate(table$label)))
       
     }
     
@@ -113,7 +114,7 @@ shinyServer(function(input, output, session) {
   
   output$UI_control1 <- renderUI({
     
-    if (input$select_table=="Barchart of cases by age") {
+    if (input$select_table==2) {
       
       radioButtons("radioAgeGroup", "Age-group division:",
                    c("0-4,5-9,...,80-84,85+" = 1,
@@ -121,7 +122,7 @@ shinyServer(function(input, output, session) {
       )
     }  
     
-    else if (input$select_table=="Top cancer") {
+    else if (input$select_table==3) {
       
       radioButtons("radioValue", "Value:",
                    c("Age-standardized rate" = "asr",
@@ -131,7 +132,7 @@ shinyServer(function(input, output, session) {
       
     }
     
-    else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+    else if (input$select_table==4) {
       
       radioButtons("radioLog", "y axes scale:",
                    c("Logarithmic" = "log",
@@ -143,7 +144,7 @@ shinyServer(function(input, output, session) {
   
   output$UI_control2 <- renderUI({
     
-    if (input$select_table %in% c("Top cancer","Age-specific rates (Top Cancer Sites)")) {
+    if (input$select_table %in% c(3,4)) {
       
       temp <- isolate(cancer_group$select)
       
@@ -159,13 +160,13 @@ shinyServer(function(input, output, session) {
   output$UI_control3 <- renderUI({
     
     
-    if (input$select_table=="Top cancer") {
+    if (input$select_table==3) {
       
       sliderInput("slideNbTopBar", "Number of cancer sites:", 3, 20, 10)
       
       
     } 
-    else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+    else if (input$select_table==4) {
       
       sliderInput("slideNbTopAgeSpe", "Number of cancer sites:", 1, 10, 5)
       
@@ -176,7 +177,7 @@ shinyServer(function(input, output, session) {
   
   output$UI_control4 <- renderUI({
     
-    if (input$select_table=="Top cancer") {
+    if (input$select_table==3) {
       sliderInput("slideAgeRange", "Age group:", 0, 90, c(0,90), step=5)
     }
   })
@@ -186,22 +187,30 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$select_table,{
     
-    if (input$select_table=="Population pyramid") {
+    
+    table$label <- switch
+    
+    if (input$select_table==1) {
+      table$label <- "Population pyramid"
       hide(id="controls_COL1", anim=TRUE)
       hide(id="controls_COL2", anim=TRUE)
     } 
-    else if (input$select_table=="Barchart of cases by age") {
+    else if (input$select_table==2) {
+      table$label <- "Barchart cases by age"
       show(id="controls_COL1", anim=TRUE)
       hide(id="controls_COL2", anim=TRUE)
     }
-    else if (input$select_table=="Top cancer") {
+    else if (input$select_table== 3) {
+      table$label <- "Barchart Top cancer both sexes"
       show(id="controls_COL1", anim=TRUE)
       show(id="controls_COL2", anim=TRUE)
     }
-    else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+    else if (input$select_table %in% c(3,4)) {
+      table$label <- "Age specific trend top cancer"
       show(id="controls_COL1", anim=TRUE)
       show(id="controls_COL2", anim=TRUE)
     }
+
   })
   
   observeEvent(values$nb_slide,{
@@ -322,7 +331,7 @@ shinyServer(function(input, output, session) {
 	    
       isolate(progress_bar$object)$set(value = 30, message = 'Please wait:', detail = 'Calculate statistics')
       
-      if (input$select_table=="Population pyramid") {
+      if (input$select_table==1) {
         
         dt_temp <-  dt_select()$data[, c("age", "sex", "py", "age_group_label"), with=FALSE]
         dt_temp <- unique(dt_temp)
@@ -334,7 +343,7 @@ shinyServer(function(input, output, session) {
         dt_temp$age <- dt_temp$age-1
         
       }  
-      else if (input$select_table=="Barchart of cases by age") {
+      else if (input$select_table==2) {
         
         
         if (!is.null(input$radioAgeGroup)) {
@@ -378,7 +387,7 @@ shinyServer(function(input, output, session) {
         
         
       } 
-      else if (input$select_table=="Top cancer") {
+      else if (input$select_table==3) {
         
         if (!is.null(input$slideAgeRange)) {
             
@@ -453,7 +462,7 @@ shinyServer(function(input, output, session) {
         }
        
       }
-      else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+      else if (input$select_table==4) {
         
         dt_temp <- dt_select()$data
         
@@ -516,13 +525,13 @@ shinyServer(function(input, output, session) {
       isolate(progress_bar$object)$set(value = 60,  message = 'Please wait:', detail = 'Render graph')
       
       
-      if (isolate(input$select_table)=="Population pyramid") {
+      if (isolate(input$select_table)==1) {
         
 
         canreg_population_pyramid(dt_all(), var_bar = "age_group_label",group_by = "sex",var_age_cut="age",canreg_header = isolate(registry_info$label))
         
       } 
-      else if (isolate(input$select_table)=="Barchart of cases by age") {
+      else if (isolate(input$select_table)==2) {
         
         skin <- FALSE
         
@@ -536,7 +545,7 @@ shinyServer(function(input, output, session) {
           skin=skin)
         
       } 
-      else if (isolate(input$select_table)=="Top cancer") {
+      else if (isolate(input$select_table)==3) {
         
         
         nb_top <- input$slideNbTopBar
@@ -593,7 +602,7 @@ shinyServer(function(input, output, session) {
         }
         
       }
-      else if (isolate(input$select_table)=="Age-specific rates (Top Cancer Sites)") {
+      else if (isolate(input$select_table)==4) {
        
 
 
@@ -644,7 +653,7 @@ shinyServer(function(input, output, session) {
       #cat(paste0(input$text_filename, ".", input$select_format))
       
       #multiple file
-      if (input$select_table=="Age-specific rates (Top Cancer Sites)" & 
+      if (input$select_table==4 & 
           input$select_format %in% c("png", "tiff", "svg")
           ) 
         {
@@ -661,7 +670,7 @@ shinyServer(function(input, output, session) {
       file_temp <- substr(file,1, nchar(file)-nchar(input$select_format)-1)
 
 
-      if (input$select_table=="Population pyramid") {
+      if (input$select_table==1) {
         
         #population pyramid
     
@@ -675,7 +684,7 @@ shinyServer(function(input, output, session) {
                       canreg_header = isolate(registry_info$label))
         
       } 
-      else if (input$select_table=="Barchart of cases by age") {
+      else if (input$select_table==2) {
         
         skin <- FALSE
         
@@ -692,7 +701,7 @@ shinyServer(function(input, output, session) {
                       skin=skin)
 
       }
-      else if (input$select_table=="Top cancer") {
+      else if (input$select_table==3) {
         
         nb_top <- input$slideNbTopBar
         
@@ -751,7 +760,7 @@ shinyServer(function(input, output, session) {
         }
         
       }
-      else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+      else if (input$select_table==4) {
         
 
         logscale <- (input$radioLog == "log")
@@ -813,7 +822,7 @@ shinyServer(function(input, output, session) {
 	  withProgress(message = 'add powerpoint slide', value = 0, {
       filename <- paste0(tempdir(), "\\temp_graph",values$nb_slide+1)  
       
-      if (input$select_table=="Population pyramid") {
+      if (input$select_table==1) {
         
         
         
@@ -827,7 +836,7 @@ shinyServer(function(input, output, session) {
         values$doc <- ph_with_img(values$doc, paste0(filename, ".png"),width=graph_width,height=graph_width*dims[1]/dims[2])
         
       } 
-      else if (input$select_table=="Barchart of cases by age") {
+      else if (input$select_table==2) {
         
         skin <- FALSE
         
@@ -848,7 +857,7 @@ shinyServer(function(input, output, session) {
         values$doc <- ph_with_img(values$doc, paste0(filename, ".png"),width=graph_width,height=graph_width*dims[1]/dims[2])
         
       } 
-      else if (input$select_table=="Top cancer") {
+      else if (input$select_table==3) {
         
         nb_top <- input$slideNbTopBar
         
@@ -912,7 +921,7 @@ shinyServer(function(input, output, session) {
         
         
       }
-      else if (input$select_table=="Age-specific rates (Top Cancer Sites)") {
+      else if (input$select_table==4) {
         
         
         logscale <- (input$radioLog == "log")

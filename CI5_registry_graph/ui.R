@@ -24,13 +24,13 @@ ui <- dashboardPage(
 		uiOutput("UI_registry"),
 		
 		selectInput("select_table", "Graphics", 
-		            as.list(c(
-		              "Top cancer",
-		              "Age-specific rates (Top Cancer Sites)",
-		              "Barchart of cases by age", 
-		              "Population pyramid"
+		            c(
+		              "Top cancer" = 3 ,
+		              "Age-specific rates (Top Cancer Sites)" = 4,
+		              "Barchart of cases by age" = 2, 
+		              "Population pyramid" = 1
 		              )
-		              )
+		              
 		            ),
 		
 		tags$div(class="subHeader", checked=NA,
