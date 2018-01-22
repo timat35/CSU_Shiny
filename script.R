@@ -6,7 +6,7 @@
 # test with setwd()
 setwd("C:\\CSU_shiny\\CI5_registry_graph")
 .libPaths( "C:/CSU_shiny/pkg")
-shiny::runApp()
+shiny::runApp(launch.browser =TRUE)
 
 
 ################ Create file dictionnary #######################

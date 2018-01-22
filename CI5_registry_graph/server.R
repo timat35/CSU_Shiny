@@ -940,16 +940,16 @@ shinyServer(function(input, output, session) {
                       var_color="cancer_color",
                       logscale = logscale,
                       nb_top = nb_top,
-                      plot_title = NULL)
+                      plot_title =  NULL)
         
         values$doc <-  add_slide(values$doc, layout="Canreg_vertical", master="Office Theme") ## add PPTX slide (Title + content)
-        values$doc <- ph_with_text(values$doc, "Age-specific rates:\r\nMales", type="title")
+        values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
         dims <- attr( png::readPNG (paste0(filename, "001.png")), "dim" )
         values$doc <- ph_with_img(values$doc, paste0(filename, "001.png"),width=graph_width_vertical,height=graph_width_vertical*dims[1]/dims[2])
         
         
         values$doc <-  add_slide(values$doc, layout="Canreg_vertical", master="Office Theme") ## add PPTX slide (Title + content)
-        values$doc <- ph_with_text(values$doc, "Age-specific rates:\r\nFemales", type="title")
+        values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
         values$doc <- ph_with_img(values$doc, paste0(filename, "002.png"),width=graph_width_vertical,height=graph_width_vertical*dims[1]/dims[2])
         
         
