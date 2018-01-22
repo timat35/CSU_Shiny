@@ -3,7 +3,7 @@
 #to test
 # input <- list()
 # input$select_registry <- 12001
-# input$select_registry <- 12
+# 
 # input$select_format <- "pdf"
 # input$text_filename <- "test"
 
@@ -36,7 +36,9 @@ shinyServer(function(input, output, session) {
   
 
   source("source/Rcan_core.r")
-  file_cancer_color <- "data/color_cancer.csv"
+  file_cancer_color_ci5 <- "data/color_cancer_ci5.csv"
+  file_cancer_color_globo <- "data/color_cancer_globocan.csv"
+  file_globocan_dict <- "data/cancer_CI5_globocan.csv"
   file_data <- "data/"
   file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
   file_utf8 <- ""
@@ -50,13 +52,16 @@ shinyServer(function(input, output, session) {
   graph_width <- 8
   graph_width_vertical <- 4
   
-  dt_cancer_color <- data.table(read.csv(file_cancer_color))
+  dt_cancer_color_ci5 <- data.table(read.csv(file_cancer_color_ci5))
+  dt_cancer_color_globo <- data.table(read.csv(file_cancer_color_globo))
+  dt_globo_dict <- data.table(read.csv(file_globocan_dict))
   
   #reactive values init
   values <- reactiveValues(doc = NULL, nb_slide = 0, text= "Slide included")
   bool_rv <- reactiveValues(trigger=FALSE)
   registry_info <- reactiveValues(data=NULL, label ="")
   progress_bar <- reactiveValues(object=NULL)
+  cancer_group <- reactiveValues(select = "ci5")
   
 
 
@@ -136,6 +141,21 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  output$UI_control2 <- renderUI({
+    
+    if (input$select_table %in% c("Top cancer","Age-specific rates (Top Cancer Sites)")) {
+      
+      temp <- isolate(cancer_group$select)
+      
+      radioButtons("radioCancer", "Cancer group:",
+                   c("CI5 XI" = "ci5",
+                     "Globocan" = "globocan"), 
+                     selected = temp)
+      
+    }
+    
+  })
+  
   output$UI_control3 <- renderUI({
     
     
@@ -161,20 +181,7 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  observeEvent(input$radioValue , {
 
-    
-    if (input$radioValue == "cum") {
-      vals <- 75
-    } else {
-      vals <- 90
-    }
-    
-    # If the slide range value are not update, the trigger is turn on, so the graph will be update
-    bool_rv$trigger = input$slideAgeRange[2] == vals
-    updateSliderInput(session, "slideAgeRange", "Age group:", value=c(0,90), min=0, max=vals,step=5)
-    
-  })
     
   
   observeEvent(input$select_table,{
@@ -214,6 +221,28 @@ shinyServer(function(input, output, session) {
   })
   
 
+  observeEvent(input$radioValue , {
+    
+    
+    if (input$radioValue == "cum") {
+      vals <- 75
+    } else {
+      vals <- 90
+    }
+    
+    # If the slide range value are not update, the trigger is turn on, so the graph will be update
+    bool_rv$trigger = input$slideAgeRange[2] == vals
+    updateSliderInput(session, "slideAgeRange", "Age group:", value=c(0,90), min=0, max=vals,step=5)
+    
+  })
+  
+  observeEvent(input$radioCancer , {
+  
+    cancer_group$select <- input$radioCancer
+    
+  })
+  
+  
   #Data management
   
   #Select CI5
@@ -257,7 +286,9 @@ shinyServer(function(input, output, session) {
         
         isolate(progress_bar$object)$set(value = 20, message = 'Please wait:', detail = 'Select registry or country')
         
-        dt_temp<- dt_CI5()[registry == input$select_registry]
+        dt_temp <- dt_CI5()
+        
+        dt_temp<- dt_temp[registry == input$select_registry] #for test
        
         registry_info$label <- isolate(registry_info$data)[registry==input$select_registry,]$registry_lab
         
@@ -355,12 +386,30 @@ shinyServer(function(input, output, session) {
            
           dt_temp <- dt_select()$data
           
-          dt_temp <- dt_temp[cancer != 63,]
-          dt_temp <- dt_temp[cancer != 62,]
-          dt_temp <- dt_temp[cancer != 25,]
-          
-          group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
-          dt_temp <-  dt_temp[,list(cases=sum(cases), py=sum(py)), by=group_by]
+          if (input$radioCancer == "ci5") {
+            
+            dt_temp <- dt_temp[cancer != 63,]
+            dt_temp <- dt_temp[cancer != 62,]
+            dt_temp <- dt_temp[cancer != 25,]
+            
+          } else {
+            
+            dt_temp <- merge(dt_temp, dt_globo_dict, by=c("cancer", "cancer_lab"))
+            dt_temp <- dt_temp[globocan_code != 99,]
+            dt_temp <- dt_temp[,cancer := NULL]
+            dt_temp <- dt_temp[,cancer_lab := NULL]
+            setnames(dt_temp, "globocan_code", "cancer")
+            setnames(dt_temp, "globocan_label", "cancer_lab")
+            
+            dt_temp <- dt_temp[cancer != 29,]
+            
+            group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
+            dt_temp <-  dt_temp[,list(cases=sum(cases), py=mean(py)), by=group_by]
+              
+            
+          }
+            
+         
           dt_temp$sex <- factor(dt_temp$sex, levels=c(1,2), labels=c("Male", "Female"))
           dt_temp[, cancer :=factor(cancer)]
           
@@ -408,12 +457,41 @@ shinyServer(function(input, output, session) {
         
         dt_temp <- dt_select()$data
         
-        dt_temp <- dt_temp[cancer != 63,]
-        dt_temp <- dt_temp[cancer != 62,]
-        dt_temp <- dt_temp[cancer != 25,]
-        group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
+        if (input$radioCancer == "ci5") {
+          
+          dt_temp <- dt_temp[cancer != 63,]
+          dt_temp <- dt_temp[cancer != 62,]
+          dt_temp <- dt_temp[cancer != 25,]
+          
+        } else {
+          
+          dt_temp <- merge(dt_temp, dt_globo_dict, by=c("cancer", "cancer_lab"))
+          dt_temp <- dt_temp[globocan_code != 99,]
+          dt_temp <- dt_temp[,cancer := NULL]
+          dt_temp <- dt_temp[,cancer_lab := NULL]
+          setnames(dt_temp, "globocan_code", "cancer")
+          setnames(dt_temp, "globocan_label", "cancer_lab")
+
+          dt_temp <- dt_temp[cancer != 29,]
+          group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
+          dt_temp <-  dt_temp[,list(cases=sum(cases), py=mean(py)), by=group_by]
+          
+          
+        }
+       
+        
         dt_temp$sex <- factor(dt_temp$sex, levels=c(1,2), labels=c("Male", "Female"))
-        dt_temp <- merge(dt_temp, dt_cancer_color, by=c("cancer_lab", "cancer"))
+        
+        
+        if (isolate(input$radioCancer) == "ci5") {
+          dt_color <- dt_cancer_color_ci5
+        } else {
+          dt_color <- dt_cancer_color_globo
+        }
+        
+        
+        
+          dt_temp <- merge(dt_temp, dt_color, by=c("cancer_lab", "cancer"))
         
       }
       

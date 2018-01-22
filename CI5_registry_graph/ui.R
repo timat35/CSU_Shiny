@@ -69,7 +69,8 @@ ui <- dashboardPage(
 	   ),
 	  fluidRow(
 	    box(id="controls_COL1",
-	      uiOutput("UI_control1")
+	      uiOutput("UI_control1"),
+	      uiOutput("UI_control2")
 	    ),
 	    box(id="controls_COL2",
   	    uiOutput("UI_control3"),
