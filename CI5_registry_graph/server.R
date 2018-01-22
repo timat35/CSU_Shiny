@@ -392,8 +392,7 @@ shinyServer(function(input, output, session) {
             
           }
           
-          print("\nafter calcul\n")
-          print(bool_rv$trigger)
+       
           
           if (bool_rv$trigger) {
             bool_rv$trigger <- FALSE

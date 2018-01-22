@@ -1,8 +1,8 @@
             #define MyAppName "CI5_graph"
 #define MyAppVersion "0.1.0"
 #define MyAppExeName "CI5_graph.bat"
-#define RVersion "3.4.2"
-#define IncludeR true
+#define RVersion "3.4.3"
+#define IncludeR false
 #define PandocVersion "1.17.2"
 #define IncludePandoc false
 #define IncludeChrome false
@@ -11,7 +11,7 @@
 
 [Setup]
 AppName = {#MyAppName}
-AppId = {{0V79GU8T-UUV2-DIKP-GS3B-LDUUBP6DG2R4}
+AppId = {{U0IU4AT9-5BW1-5773-E6Y3-1USIZKEOKLKY}
 DefaultDirName = {userdocs}\{#MyAppName}
 DefaultGroupName = {#MyAppName}
 OutputDir = RInno_installer

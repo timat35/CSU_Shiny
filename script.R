@@ -63,7 +63,7 @@ setwd("C:\\CSU_shiny\\CI5_registry_graph")
 create_app(app_name = "CI5_graph",
            pkgs=c("shiny","shinydashboard", "shinyjs", "data.table", "ggplot2", "gridExtra", "Cairo", "officer"),
            remotes = c("timat35/Rcan/Rcan"),
-           include_R = TRUE,
+           include_R = FALSE,
            app_version= "0.1.0",
            include_Chrome=FALSE,
            setup_icon = "app.ico")
