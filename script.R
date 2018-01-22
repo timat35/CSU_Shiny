@@ -36,7 +36,7 @@ devtools::install_github("timat35/Rcan", subdir="Rcan")
 .libPaths( "C:/Users/laversannem/Documents/R/win-library/3.4")
 install.packages('rsconnect')
 
-library(rsconnect)
+library(data.table)
 
 
 # deploy app on shinyapp.io
@@ -63,7 +63,7 @@ setwd("C:\\CSU_shiny\\CI5_registry_graph")
 create_app(app_name = "CI5_graph",
            pkgs=c("shiny","shinydashboard", "shinyjs", "data.table", "ggplot2", "gridExtra", "Cairo", "officer"),
            remotes = c("timat35/Rcan/Rcan"),
-           include_R = FALSE,
+           include_R = TRUE,
            app_version= "0.1.0",
            include_Chrome=FALSE,
            setup_icon = "app.ico")

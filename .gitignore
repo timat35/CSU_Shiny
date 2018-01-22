@@ -2,6 +2,9 @@
 pkg/
 ppt/
 
+# program file
+*.exe
+
 
 # Windows image file caches
 Thumbs.db
