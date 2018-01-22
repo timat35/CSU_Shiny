@@ -38,13 +38,13 @@ shinyServer(function(input, output, session) {
   source("source/Rcan_core.r")
   file_cancer_color_ci5 <- "data/color_cancer_ci5.csv"
   file_cancer_color_globo <- "data/color_cancer_globocan.csv"
-  file_globocan_dict <- "data/cancer_CI5_globocan.csv"
+  file_globocan_dict <- "data/cancer_ci5_globocan.csv"
   file_data <- "data/"
   file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
-  file_utf8 <- ""
+  #file_utf8 <- ""
   
   #Change for shinyappio: 
-  #file_utf8 <- "_UTF8"
+  file_utf8 <- "_UTF8"
   
   
   #Parametre and fixed variable
