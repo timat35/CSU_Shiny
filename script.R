@@ -1,5 +1,5 @@
 
-      
+
 ################ Test app  Within R studio #################
 
 
@@ -77,13 +77,16 @@ shiny::runApp()
 
 ############# App reactive values dependencies information ####
 
-renderPlot() <- dt_all(), input$slideNbTopBar, input$radioLog, input$slideNbTopAgeSpe
-  dt_all() <- dt_select(), input$select_table, input$radioAgeGroup, input$slideAgeRange, rv$trigger
+renderPlot() <- dt_all(), input$slideNbTopBar, input$radioLog, input$slideNbTopAgeSpe, 
+  dt_all() <- dt_select(), input$select_table, input$radioAgeGroup, input$slideAgeRange, rv$trigger, input$radioCancer, input$SelectCancerSites
     dt_select() <- dt_CI5(), input$select_registry
       dt_CI5() <- input$check_country
 
       input$select_registry <- input$select_continent, registry_info$data,  input$check_country
 
-  input$slideAgeRange <- input$radioValue
-  rv$trigger <- input$radioValue
+    input$slideAgeRange <- input$radioValue
+    rv$trigger <- input$radioValue (if no change in slideAgeRange)
+  
+    input$SelectCancerSites <- input$radioCancer
 
+  

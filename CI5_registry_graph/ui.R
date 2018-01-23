@@ -27,6 +27,7 @@ ui <- dashboardPage(
 		            c(
 		              "Top cancer" = 3 ,
 		              "Age-specific rates (Top Cancer Sites)" = 4,
+		              "Age-specific rate by cancer sites" = 5,
 		              "Barchart of cases by age" = 2, 
 		              "Population pyramid" = 1
 		              )

@@ -1,11 +1,12 @@
 
 
-#to test
+# #to test
 # input <- list()
 # input$select_registry <- 12001
 # 
 # input$select_format <- "pdf"
 # input$text_filename <- "test"
+# input$selectCancerSite <- "lip"
 
 shinyServer(function(input, output, session) {
 
@@ -41,10 +42,10 @@ shinyServer(function(input, output, session) {
   file_globocan_dict <- "data/cancer_ci5_globocan.csv"
   file_data <- "data/"
   file_pptx <-paste(sep="/","slide_template", "shiny_template.pptx")
-  #file_utf8 <- ""
+  file_utf8 <- ""
   
   #Change for shinyappio: 
-  file_utf8 <- "_UTF8"
+  #file_utf8 <- "_UTF8"
   
   
   #Parametre and fixed variable
@@ -58,7 +59,7 @@ shinyServer(function(input, output, session) {
   
   #reactive values init
   values <- reactiveValues(doc = NULL, nb_slide = 0, text= "Slide included")
-  bool_rv <- reactiveValues(trigger=FALSE)
+  bool_rv <- reactiveValues(trigger1=FALSE)
   registry_info <- reactiveValues(data=NULL, label ="")
   progress_bar <- reactiveValues(object=NULL)
   cancer_group <- reactiveValues(select = "ci5")
@@ -104,6 +105,12 @@ shinyServer(function(input, output, session) {
       
       values$text <- paste0(isolate(values$text), '<br>',paste0(isolate(registry_info$label), " ", isolate(table$label)))
       
+      if (isolate(input$select_table == 5)) {
+        values$text <- paste(isolate(values$text), isolate(input$selectCancerSite))
+      }
+      
+     
+      
     }
     
     tags$div(id="divSlidelist", class="mat_text", checked=NA,
@@ -132,7 +139,7 @@ shinyServer(function(input, output, session) {
       
     }
     
-    else if (input$select_table==4) {
+    else if (input$select_table %in% c(4,5)) {
       
       radioButtons("radioLog", "y axes scale:",
                    c("Logarithmic" = "log",
@@ -144,7 +151,7 @@ shinyServer(function(input, output, session) {
   
   output$UI_control2 <- renderUI({
     
-    if (input$select_table %in% c(3,4)) {
+    if (input$select_table %in% c(3,4,5)) {
       
       temp <- isolate(cancer_group$select)
       
@@ -169,6 +176,29 @@ shinyServer(function(input, output, session) {
     else if (input$select_table==4) {
       
       sliderInput("slideNbTopAgeSpe", "Number of cancer sites:", 1, 10, 5)
+      
+      
+    } else if (input$select_table==5) {
+      
+
+      if (isolate(input$radioCancer) == "ci5") {
+        fileCSV <- "color_cancer_ci5.csv"
+      } else {
+        fileCSV <- "color_cancer_globocan.csv"
+      }
+      
+      dt_list <- read.csv(paste0(file_data, fileCSV))
+      
+      cancer_list <- dt_list$cancer_lab
+      n <- length(cancer_list)
+      cancer_list <- as.character(cancer_list)
+      cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
+      
+      if (isolate(input$radioCancer) == "ci5") {
+        cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
+      }
+      
+      selectInput("selectCancerSite", "Select cancer sites", cancer_list)
       
       
     }
@@ -205,8 +235,14 @@ shinyServer(function(input, output, session) {
       show(id="controls_COL1", anim=TRUE)
       show(id="controls_COL2", anim=TRUE)
     }
-    else if (input$select_table %in% c(3,4)) {
+    else if (input$select_table== 4) {
       table$label <- "Age specific trend top cancer"
+      show(id="controls_COL1", anim=TRUE)
+      show(id="controls_COL2", anim=TRUE)
+    }
+    
+    else if (input$select_table== 5) {
+      table$label <- "Age specific trend"
       show(id="controls_COL1", anim=TRUE)
       show(id="controls_COL2", anim=TRUE)
     }
@@ -229,6 +265,32 @@ shinyServer(function(input, output, session) {
     
   })
   
+  observeEvent(input$radioCancer , {
+    
+    if (input$radioCancer == "ci5") {
+      fileCSV <- "color_cancer_ci5.csv"
+    } else {
+      fileCSV <- "color_cancer_globocan.csv"
+    }
+    
+    dt_list <- read.csv(paste0(file_data, fileCSV))
+    
+    cancer_list <- dt_list$cancer_lab
+    n <- length(cancer_list)
+    cancer_list <- as.character(cancer_list)
+    cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
+    
+    if (input$radioCancer == "ci5") {
+      cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
+    }
+    
+    
+    cancer_list <- as.list(cancer_list)
+    updateSelectInput(session, "selectCancerSite", "Select cancer sites", cancer_list)
+    
+    
+  })
+  
 
   observeEvent(input$radioValue , {
     
@@ -239,14 +301,15 @@ shinyServer(function(input, output, session) {
       vals <- 90
     }
     
-    # If the slide range value are not update, the trigger is turn on, so the graph will be update
-    bool_rv$trigger = input$slideAgeRange[2] == vals
+    # If the slide range value are not update, the trigger1 is turn on, so the graph will be update
+    bool_rv$trigger1 = input$slideAgeRange[2] == vals
     updateSliderInput(session, "slideAgeRange", "Age group:", value=c(0,90), min=0, max=vals,step=5)
     
   })
   
   observeEvent(input$radioCancer , {
-  
+    
+    # to avoid radio value to be reset each time
     cancer_group$select <- input$radioCancer
     
   })
@@ -452,8 +515,8 @@ shinyServer(function(input, output, session) {
           
        
           
-          if (bool_rv$trigger) {
-            bool_rv$trigger <- FALSE
+          if (bool_rv$trigger1) {
+            bool_rv$trigger1 <- FALSE
           }
 
         }
@@ -503,6 +566,31 @@ shinyServer(function(input, output, session) {
           dt_temp <- merge(dt_temp, dt_color, by=c("cancer_lab", "cancer"))
         
       }
+
+      else if (input$select_table==5) {
+        
+        dt_temp <- dt_select()$data
+       
+        
+        if (isolate(input$radioCancer == "globocan")) {
+          
+          dt_temp <- merge(dt_temp, dt_globo_dict, by=c("cancer", "cancer_lab"))
+          dt_temp <- dt_temp[globocan_code != 99,]
+          dt_temp <- dt_temp[,cancer := NULL]
+          dt_temp <- dt_temp[,cancer_lab := NULL]
+          setnames(dt_temp, "globocan_code", "cancer")
+          setnames(dt_temp, "globocan_label", "cancer_lab")
+          group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
+          dt_temp <-  dt_temp[,list(cases=sum(cases), py=mean(py)), by=group_by]
+          
+        }
+        
+        dt_temp <- dt_temp[cancer_lab == input$selectCancerSite,]
+        
+        dt_temp$sex <- factor(dt_temp$sex, levels=c(1,2), labels=c("Male", "Female"))
+        
+
+      }  
       
       
       return(dt_temp)
@@ -640,7 +728,39 @@ shinyServer(function(input, output, session) {
         }
         
       }
-      
+      else if (isolate(input$select_table)==5) {
+        
+         
+        
+        
+          dt_temp <- dt_all()
+         
+          
+          if (!is.null(input$radioLog )) {
+            logscale <- (input$radioLog == "log")
+            color_trend <- c("Male" = "#2c7bb6", "Female" = "#b62ca1")
+            
+            Rcan:::core.csu_ageSpecific(dt_temp,
+                                        var_age="age",
+                                        var_cases= "cases",
+                                        var_py="py",
+                                        group_by = "sex",
+                                        plot_title = isolate(registry_info$label),
+                                        plot_subtitle = isolate(input$selectCancerSite),
+                                        color_trend = color_trend,
+                                        logscale = logscale,
+                                        age_label_list = unique(dt_temp[["age_label_list"]]))$csu_plot
+          
+            
+          
+          
+          }
+          
+         
+          
+       
+        
+      }
 
     }
     
@@ -803,7 +923,53 @@ shinyServer(function(input, output, session) {
         
       }
       
-     
+      else if (input$select_table==5) {
+        
+        dt_temp <- dt_all()
+        
+        logscale <- (input$radioLog == "log")
+        color_trend <- c("Male" = "#2c7bb6", "Female" = "#b62ca1")
+        
+        #create a fake function to print the graph and return data (adapt to canreg_output function)
+        temp_fun <- function(landscape = TRUE,list_graph = FALSE, return_data = FALSE) {
+          
+          if (return_data) {
+            
+            dt_temp <- dt_temp[py > 0,]
+            dt_temp[, rate := cases/py*10000]
+            dt_temp[, age_group_label := paste0("'",age_group_label,"'")]
+            dt_temp <- dt_temp[, c("cancer_lab",
+                        "age",
+                        "age_group_label",
+                        "sex",
+                        "cases",
+                        "py",
+                        "rate"), with=FALSE]
+            setkeyv(dt_temp, c("sex","age"))
+            return(dt_temp)
+            stop() 
+            
+          } 
+            
+          plot<- Rcan:::core.csu_ageSpecific(dt_temp,
+                                             var_age="age",
+                                             var_cases= "cases",
+                                             var_py="py",
+                                             group_by = "sex",
+                                             plot_title = isolate(registry_info$label),
+                                             plot_subtitle = isolate(input$selectCancerSite),
+                                             color_trend = color_trend,
+                                             logscale = logscale,
+                                             age_label_list = unique(dt_temp[["age_label_list"]]))$csu_plot
+          print(plot)
+
+        }
+        
+        canreg_output(output_type = input$select_format, filename =file_temp,
+                      landscape = FALSE,list_graph = FALSE,
+                      FUN=temp_fun)
+    
+      }
     })
   
   #Action button: Add slide
@@ -928,7 +1094,7 @@ shinyServer(function(input, output, session) {
         nb_top <- input$slideNbTopAgeSpe
         
         canreg_output(output_type = "png", filename =filename,
-                      landscape = FALSE,list_graph = TRUE,
+                      landscape = TRUE,list_graph = TRUE,
                       FUN=canreg_ageSpecific_rate_top,
                       df_data=dt_all(),
                       var_age="age",
@@ -940,27 +1106,76 @@ shinyServer(function(input, output, session) {
                       var_color="cancer_color",
                       logscale = logscale,
                       nb_top = nb_top,
-                      plot_title =  NULL)
+                      plot_title =  isolate(registry_info$label))
         
-        values$doc <-  add_slide(values$doc, layout="Canreg_vertical", master="Office Theme") ## add PPTX slide (Title + content)
-        values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
+        values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
+        #values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
         dims <- attr( png::readPNG (paste0(filename, "001.png")), "dim" )
-        values$doc <- ph_with_img(values$doc, paste0(filename, "001.png"),width=graph_width_vertical,height=graph_width_vertical*dims[1]/dims[2])
+        values$doc <- ph_with_img(values$doc, paste0(filename, "001.png"),width=graph_width,height=graph_width*dims[1]/dims[2])
         
         
-        values$doc <-  add_slide(values$doc, layout="Canreg_vertical", master="Office Theme") ## add PPTX slide (Title + content)
-        values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
-        values$doc <- ph_with_img(values$doc, paste0(filename, "002.png"),width=graph_width_vertical,height=graph_width_vertical*dims[1]/dims[2])
+        values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
+        #values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
+        values$doc <- ph_with_img(values$doc, paste0(filename, "002.png"),width=graph_width,height=graph_width*dims[1]/dims[2])
         
         
+        
+      }
+      else if (input$select_table==5) {
+        
+        dt_temp <- dt_all()
+        
+        logscale <- (input$radioLog == "log")
+        color_trend <- c("Male" = "#2c7bb6", "Female" = "#b62ca1")
+        
+        #create a fake function to print the graph and return data (adapt to canreg_output function)
+        temp_fun <- function(landscape = TRUE,list_graph = FALSE, return_data = FALSE) {
+          
+          if (return_data) {
+            
+            dt_temp[, rate := cases/py*10000]
+            dt_temp[, age_group_label := paste0("'",age_group_label,"'")]
+            dt_temp <- dt_temp[, c("cancer_label",
+                                   "age",
+                                   "age_group_label",
+                                   "sex",
+                                   "cases",
+                                   "py",
+                                   "rate"), with=FALSE]
+            setkeyv(dt_temp, c(group_by,var_age))
+            return(dt_temp)
+            stop() 
+            
+          } 
+          
+          plot<- Rcan:::core.csu_ageSpecific(dt_temp,
+                                             var_age="age",
+                                             var_cases= "cases",
+                                             var_py="py",
+                                             group_by = "sex",
+                                             plot_title = isolate(registry_info$label),
+                                             plot_subtitle = isolate(input$selectCancerSite),
+                                             color_trend = color_trend,
+                                             logscale = logscale,
+                                             age_label_list = unique(dt_temp[["age_label_list"]]))$csu_plot
+          print(plot)
+          
+        }
+        
+        canreg_output(output_type = "png", filename =filename,
+                      landscape = TRUE,list_graph = FALSE,
+                      FUN=temp_fun)
+        
+        values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
+        dims <- attr( png::readPNG (paste0(filename, ".png")), "dim" )
+        values$doc <- ph_with_img(values$doc, paste0(filename, ".png"),width=graph_width,height=graph_width*dims[1]/dims[2])
         
       }
       
       values$nb_slide <- values$nb_slide + 1
     
-	})
+      })
     }
-
   )
   
   #Download presentation
