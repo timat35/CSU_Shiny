@@ -11,7 +11,7 @@
 
 [Setup]
 AppName = {#MyAppName}
-AppId = {{ULS6A2RK-WGNB-AB2M-JI95-VTF8Q7MK7AR2}
+AppId = {{V20Z22R1-6IIZ-F7W8-VC6N-KVXD8AZ9CRP3}
 DefaultDirName = {userdocs}\{#MyAppName}
 DefaultGroupName = {#MyAppName}
 OutputDir = RInno_installer
@@ -58,10 +58,10 @@ Source: "default.ico"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "LICENSE"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "server.R"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "ui.R"; DestDir: "{app}"; Flags: ignoreversion;
-          Source: "data/cancer_CI5_globocan.csv"; DestDir: "{app}\data"; Flags: ignoreversion;
+          Source: "data/cancer_ci5_globocan.csv"; DestDir: "{app}\data"; Flags: ignoreversion;
 Source: "data/CI5XI.rds"; DestDir: "{app}\data"; Flags: ignoreversion;
 Source: "data/CI5XI_country.rds"; DestDir: "{app}\data"; Flags: ignoreversion;
-Source: "data/color_cancer_CI5.csv"; DestDir: "{app}\data"; Flags: ignoreversion;
+Source: "data/color_cancer_ci5.csv"; DestDir: "{app}\data"; Flags: ignoreversion;
 Source: "data/color_cancer_globocan.csv"; DestDir: "{app}\data"; Flags: ignoreversion;
 Source: "data/continent_lab.csv"; DestDir: "{app}\data"; Flags: ignoreversion;
 Source: "data/country_list.csv"; DestDir: "{app}\data"; Flags: ignoreversion;
