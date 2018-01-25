@@ -12,6 +12,7 @@ shinyServer(function(input, output, session) {
 
   #app close when the session is stopped  
   session$onSessionEnded(function() {
+    cat("back to canreg")
     stopApp()
   })
   

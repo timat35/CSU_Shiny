@@ -11,6 +11,8 @@ start_app <- function(
   chrome = reg_paths$chrome,
   ff = reg_paths$ff,
   ie = reg_paths$ie) {
+  
+  launch_browser <- TRUE
 
   if (user_browser == "chrome") {
     if (chrome != "none") {
