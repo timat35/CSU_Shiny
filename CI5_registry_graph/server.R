@@ -1,12 +1,12 @@
 
 
 #to test
-# input <- list()
-# input$select_registry <- 12001
-# 
-# input$select_format <- "pdf"
-# input$text_filename <- "test"
-# input$selectCancerSite <- "lip"
+input <- list()
+input$select_registry <- 12001
+
+input$select_format <- "pdf"
+input$text_filename <- "test"
+input$selectCancerSite <- "lip"
 
 shinyServer(function(input, output, session) {
 
@@ -897,45 +897,29 @@ shinyServer(function(input, output, session) {
           
           dt_temp$cancer_lab <-Rcan:::core.csu_legend_wrapper(dt_temp$cancer_lab, 15)
           
-
-          
-          
-          plotlist <- list()
-          j <- 1 
-          
-          for (i in levels(dt_temp$sex)) {
+          #Use lapply to avoid loop (problem with ggplot lazy evaluation)
+          plotlist <- lapply(levels(dt_temp$sex), function (i) {
             
-
             plot_title <- isolate(registry_info$label)
             plot_caption <- ""
             plot_subtitle <-  paste0("Top ",nb_top, " cancer sites\n",i)
-            
             dt_plot <- dt_temp[sex == i]
-            
-            
             dt_label_order <- setkey(unique(dt_plot[, c("cancer_lab","cancer_color", "CSU_RANK"), with=FALSE]), CSU_RANK)
             dt_plot$cancer_lab <- factor(dt_plot$cancer_lab,levels = rev(dt_label_order$cancer_lab)) 
             color_cancer <- as.character(rev(dt_label_order$cancer_color))
             
-            
-            
-            plotlist[[j]] <-
+            return(
               csu_bar_plot(
                 dt_plot,var_top=var_top,var_bar="cancer_lab",
                 plot_title=plot_title,plot_caption=plot_caption,plot_subtitle = plot_subtitle,
                 color_bar=color_cancer,
                 landscape=FALSE,digit=digit,
                 xtitle=ytitle)
+              )
             
-            if (j == 1) {
-              ttt <-  plotlist[[1]]
-            }
-            j <- j+1
-            
-          }
-          
-          
-          grid.arrange(ttt, plotlist[[2]], ncol=2)
+          })
+
+          grid.arrange( plotlist[[1]], plotlist[[2]], ncol=2)
           
         }
         
@@ -952,7 +936,7 @@ shinyServer(function(input, output, session) {
       #cat(paste0(input$text_filename, ".", input$select_format))
       
       #multiple file
-      if (input$select_table==4 & 
+      if (input$select_table %in% c(4,6) & 
           input$select_format %in% c("png", "tiff", "svg")
           ) 
         {
@@ -1101,7 +1085,6 @@ shinyServer(function(input, output, session) {
         
         
       }
-      
       else if (input$select_table==5) {
         
         dt_temp <- dt_all()
@@ -1148,6 +1131,87 @@ shinyServer(function(input, output, session) {
                       landscape = FALSE,list_graph = FALSE,
                       FUN=temp_fun)
     
+      }
+      else if (input$select_table==6) {
+        
+        dt_temp <- dt_all()
+        
+        nb_top <- input$slideNbTopBar
+        
+        last_age <- (isolate(input$slideAgeRange)[2]/5)
+        max_age <- dt_select()$max_age
+        
+        if (last_age < max_age) {
+          age2 <- isolate(input$slideAgeRange)[2]-1
+        } else {
+          age2 <- paste0(((max_age-1)*5), "+")
+        }
+        
+        
+        if (isolate(input$radioValue) == "asr") {
+          var_top <- "asr"
+          digit <- 1
+          ytitle <- paste0("Age-standardized incidence rate per ", formatC(100000, format="d", big.mark=","), ", ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        } 
+        else if (isolate(input$radioValue) == "cases"){
+          var_top <- "cases"
+          digit <- 0
+          ytitle <-  paste0("Number of cases, ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        }
+        else if (isolate(input$radioValue) == "cum") {
+          var_top <- "cum_risk"
+          digit <- 2
+          if (last_age >= 15) {
+            age2 <- 74
+          } else {
+            age2 <- isolate(input$slideAgeRange)[2]-1
+          }
+          ytitle<-paste0("Cumulative incidence risk (percent), 0-",age2, " years old" )
+          
+          
+        }
+        
+        if (isolate(input$radioCancer) == "ci5") {
+          dt_color <- dt_cancer_color_ci5
+        } 
+        else {
+          dt_color <- dt_cancer_color_globo
+        }
+        
+        dt_color$cancer <- as.factor(dt_color$cancer)
+        dt_temp <- merge(dt_temp, dt_color, by=c("cancer_lab", "cancer"))
+        
+        canreg_output(output_type = input$select_format, filename =file_temp,
+                      landscape = FALSE,list_graph = TRUE,
+                      FUN=canreg_bar_top_single,
+                      dt=dt_temp,var_top=var_top, var_bar = "cancer_lab" ,group_by = "sex",
+                      var_color = "cancer_color",
+                      nb_top = nb_top,
+                      canreg_header = isolate(registry_info$label),
+                      digit=digit,
+                      xtitle=ytitle)
+        
+        if (input$select_format %in% c("png", "tiff", "svg")) {
+          
+          file_male <- paste0(file_temp, "001", ".", input$select_format)
+          file_female <- paste0(file_temp, "002", ".", input$select_format)
+          
+          tempfile1 <- paste0(input$text_filename, "-male.", input$select_format)
+          tempfile2 <- paste0(input$text_filename, "-female.", input$select_format)
+          
+          file.copy(file_male, tempfile1, overwrite = TRUE)
+          file.copy(file_female,tempfile2, overwrite = TRUE)
+          
+          zip(file, c(tempfile1, tempfile2))
+          
+          file.remove(c(tempfile1,tempfile2))
+
+        }
+      
       }
     })
   
@@ -1348,6 +1412,84 @@ shinyServer(function(input, output, session) {
         values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
         dims <- attr( png::readPNG (paste0(filename, ".png")), "dim" )
         values$doc <- ph_with_img(values$doc, paste0(filename, ".png"),width=graph_width,height=graph_width*dims[1]/dims[2])
+        
+      }
+      else if (input$select_table==6) {
+        
+        dt_temp <- dt_all()
+        
+        nb_top <- input$slideNbTopBar
+        
+        last_age <- (isolate(input$slideAgeRange)[2]/5)
+        max_age <- dt_select()$max_age
+        
+        if (last_age < max_age) {
+          age2 <- isolate(input$slideAgeRange)[2]-1
+        } else {
+          age2 <- paste0(((max_age-1)*5), "+")
+        }
+        
+        
+        if (isolate(input$radioValue) == "asr") {
+          var_top <- "asr"
+          digit <- 1
+          ytitle <- paste0("Age-standardized incidence rate per ", formatC(100000, format="d", big.mark=","), ", ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        } 
+        else if (isolate(input$radioValue) == "cases"){
+          var_top <- "cases"
+          digit <- 0
+          ytitle <-  paste0("Number of cases, ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        }
+        else if (isolate(input$radioValue) == "cum") {
+          var_top <- "cum_risk"
+          digit <- 2
+          if (last_age >= 15) {
+            age2 <- 74
+          } else {
+            age2 <- isolate(input$slideAgeRange)[2]-1
+          }
+          ytitle<-paste0("Cumulative incidence risk (percent), 0-",age2, " years old" )
+          
+          
+        }
+        
+        if (isolate(input$radioCancer) == "ci5") {
+          dt_color <- dt_cancer_color_ci5
+        } 
+        else {
+          dt_color <- dt_cancer_color_globo
+        }
+        
+        dt_color$cancer <- as.factor(dt_color$cancer)
+        dt_temp <- merge(dt_temp, dt_color, by=c("cancer_lab", "cancer"))
+        
+        
+        
+        
+        canreg_output(output_type = "png", filename =filename,
+                      landscape = TRUE,list_graph = TRUE,
+                      FUN=canreg_bar_top_single,
+                      dt=dt_temp,var_top=var_top, var_bar = "cancer_lab" ,group_by = "sex",
+                      var_color = "cancer_color",
+                      nb_top = nb_top,
+                      canreg_header = isolate(registry_info$label),
+                      digit=digit,
+                      xtitle=ytitle)
+        
+        values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
+        #values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
+        dims <- attr( png::readPNG (paste0(filename, "001.png")), "dim" )
+        values$doc <- ph_with_img(values$doc, paste0(filename, "001.png"),width=graph_width,height=graph_width*dims[1]/dims[2])
+        
+        
+        values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
+        #values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
+        values$doc <- ph_with_img(values$doc, paste0(filename, "002.png"),width=graph_width,height=graph_width*dims[1]/dims[2])
+        
         
       }
       

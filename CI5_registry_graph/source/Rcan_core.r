@@ -1815,6 +1815,7 @@ for (i in  1:length(temp$plotlist)) {
 canreg_bar_top_single <- function(dt, var_top, var_bar = "cancer_label" ,group_by = "SEX",
                                   nb_top = 10, landscape = FALSE,list_graph=TRUE,
                                   canreg_header = "", xtitle = "",digit  =  1,
+                                  var_color = "ICD10GROUPCOLOR",
                                   return_data  =  FALSE) {
   
   dt <- Rcan:::core.csu_dt_rank(dt, var_value = var_top, var_rank = var_bar,group_by = group_by, number = nb_top) 
@@ -1822,13 +1823,13 @@ canreg_bar_top_single <- function(dt, var_top, var_bar = "cancer_label" ,group_b
   if (return_data) {
     setnames(dt, "CSU_RANK","cancer_rank")
     setkeyv(dt, c(group_by,"cancer_rank"))
-    dt <-  dt[,-c("ICD10GROUPCOLOR"), with=FALSE]
+    dt <-  dt[,-c(var_color), with=FALSE]
     
     return(dt)
     stop() 
   }
   
-  dt$cancer_label <-Rcan:::core.csu_legend_wrapper(dt$cancer_label, 15)
+  dt$dummy_label <- Rcan:::core.csu_legend_wrapper(dt[[var_bar]], 15)
   
   plotlist <- list()
   j <- 1 
@@ -1846,15 +1847,15 @@ canreg_bar_top_single <- function(dt, var_top, var_bar = "cancer_label" ,group_b
     plot_subtitle <-  paste0("Top ",nb_top, " cancer sites\n",i)
     
     dt_plot <- dt[get(group_by) == i]
-    dt_label_order <- setkey(unique(dt_plot[, c(var_bar,"ICD10GROUPCOLOR", "CSU_RANK"), with=FALSE]), CSU_RANK)
-    dt_plot$cancer_label <- factor(dt_plot$cancer_label,levels = rev(dt_label_order$cancer_label)) 
-    color_cancer <- as.character(rev(dt_label_order$ICD10GROUPCOLOR))
+    dt_label_order <- setkey(unique(dt_plot[, c("dummy_label",var_color, "CSU_RANK"), with=FALSE]), CSU_RANK)
+    dt_plot$dummy_label <- factor(dt_plot$dummy_label,levels = rev(dt_label_order$dummy_label)) 
+    color_cancer <- as.character(rev(dt_label_order[[var_color]]))
     
 
     
     plotlist[[j]] <-
       csu_bar_plot(
-        dt_plot,var_top=var_top,var_bar=var_bar,
+        dt_plot,var_top=var_top,var_bar="dummy_label",
         plot_title=plot_title,plot_caption=plot_caption,plot_subtitle = plot_subtitle,
         color_bar=color_cancer,
         landscape=landscape,digit=digit,
