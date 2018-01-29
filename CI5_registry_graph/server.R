@@ -1,12 +1,12 @@
 
 
 #to test
-input <- list()
-input$select_registry <- 12001
-
-input$select_format <- "pdf"
-input$text_filename <- "test"
-input$selectCancerSite <- "lip"
+# input <- list()
+# input$select_registry <- 12001
+# 
+# input$select_format <- "pdf"
+# input$text_filename <- "test"
+# input$selectCancerSite <- "lip"
 
 shinyServer(function(input, output, session) {
 
