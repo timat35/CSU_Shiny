@@ -1,12 +1,12 @@
 
 
-# #to test
-# input <- list()
-# input$select_registry <- 12001
-# 
-# input$select_format <- "pdf"
-# input$text_filename <- "test"
-# input$selectCancerSite <- "lip"
+#to test
+input <- list()
+input$select_registry <- 12001
+
+input$select_format <- "pdf"
+input$text_filename <- "test"
+input$selectCancerSite <- "lip"
 
 shinyServer(function(input, output, session) {
 
@@ -65,11 +65,7 @@ shinyServer(function(input, output, session) {
   progress_bar <- reactiveValues(object=NULL)
   cancer_group <- reactiveValues(select = "ci5")
   table <- reactiveValues(label="")
-  
 
-
-
-  
   #UI controller
   output$UI_registry <- renderUI({
     
@@ -130,7 +126,7 @@ shinyServer(function(input, output, session) {
       )
     }  
     
-    else if (input$select_table==3) {
+    else if  (input$select_table %in% c(3,6)) {
       
       radioButtons("radioValue", "Value:",
                    c("Age-standardized rate" = "asr",
@@ -152,7 +148,7 @@ shinyServer(function(input, output, session) {
   
   output$UI_control2 <- renderUI({
     
-    if (input$select_table %in% c(3,4,5)) {
+    if (input$select_table %in% c(3,4,5,6)) {
       
       temp <- isolate(cancer_group$select)
       
@@ -168,7 +164,7 @@ shinyServer(function(input, output, session) {
   output$UI_control3 <- renderUI({
     
     
-    if (input$select_table==3) {
+    if  (input$select_table %in% c(3,6)) {
       
       sliderInput("slideNbTopBar", "Number of cancer sites:", 3, 20, 10)
       
@@ -208,7 +204,7 @@ shinyServer(function(input, output, session) {
   
   output$UI_control4 <- renderUI({
     
-    if (input$select_table==3) {
+    if (input$select_table %in% c(3,6)) {
       sliderInput("slideAgeRange", "Age group:", 0, 90, c(0,90), step=5)
     }
   })
@@ -218,8 +214,6 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$select_table,{
     
-    
-    table$label <- switch
     
     if (input$select_table==1) {
       table$label <- "Population pyramid"
@@ -244,6 +238,12 @@ shinyServer(function(input, output, session) {
     
     else if (input$select_table== 5) {
       table$label <- "Age specific trend"
+      show(id="controls_COL1", anim=TRUE)
+      show(id="controls_COL2", anim=TRUE)
+    }
+    
+    else if (input$select_table== 6) {
+      table$label <- "Barchart Top cancer by sexes"
       show(id="controls_COL1", anim=TRUE)
       show(id="controls_COL2", anim=TRUE)
     }
@@ -592,6 +592,79 @@ shinyServer(function(input, output, session) {
         
 
       }  
+      else if (input$select_table==6) {
+        
+        if (!is.null(input$slideAgeRange)) {
+          
+          dt_temp <- dt_select()$data
+          
+          if (input$radioCancer == "ci5") {
+            
+            dt_temp <- dt_temp[cancer != 63,]
+            dt_temp <- dt_temp[cancer != 62,]
+            dt_temp <- dt_temp[cancer != 25,]
+            
+          }
+          else {
+            
+            dt_temp <- merge(dt_temp, dt_globo_dict, by=c("cancer", "cancer_lab"))
+            dt_temp <- dt_temp[globocan_code != 99,]
+            dt_temp <- dt_temp[,cancer := NULL]
+            dt_temp <- dt_temp[,cancer_lab := NULL]
+            setnames(dt_temp, "globocan_code", "cancer")
+            setnames(dt_temp, "globocan_label", "cancer_lab")
+            
+            dt_temp <- dt_temp[cancer != 29,]
+            
+            group_by <- c("cancer_lab","cancer", "age","age_group_label", "sex")
+            dt_temp <-  dt_temp[,list(cases=sum(cases), py=mean(py)), by=group_by]
+            
+            
+          }
+          
+          
+          dt_temp$sex <- factor(dt_temp$sex, levels=c(1,2), labels=c("Male", "Female"))
+          dt_temp[, cancer :=factor(cancer)]
+          
+          first_age <- (input$slideAgeRange[1]/5)+1
+          last_age <- input$slideAgeRange[2]/5
+          
+          if (last_age >= dt_select()$max_age) last_age <- 18
+          
+          if (isolate(input$radioValue) == "cum") {
+            
+            if (last_age > 15) last_age <-15
+            
+            dt_temp <- csu_cum_risk_core(df_data =dt_temp,
+                                         var_age="age", var_cases="cases", var_py="py",
+                                         group_by = c("cancer", "cancer_lab", "sex"), 
+                                         missing_age = 19,
+                                         age_label_list = NULL,
+                                         last_age= last_age)
+            
+          } 
+          else {
+            
+            dt_temp <- Rcan:::core.csu_asr(df_data =dt_temp,
+                                           var_age="age", var_cases="cases", var_py="py",
+                                           group_by = c("cancer", "cancer_lab", "sex"), 
+                                           first_age = first_age,
+                                           last_age= last_age,
+                                           missing_age = 19)
+            
+          }
+          
+          
+          if (bool_rv$trigger1) {
+            bool_rv$trigger1 <- FALSE
+          }
+          
+        }
+        else {
+          dt_temp <- NULL
+        }
+        
+      }
       
       
       return(dt_temp)
@@ -762,6 +835,95 @@ shinyServer(function(input, output, session) {
        
         
       }
+      else if (isolate(input$select_table)==6) {
+        
+        
+        nb_top <- input$slideNbTopBar
+        
+        if (!is.null(nb_top)) {
+          
+          last_age <- (isolate(input$slideAgeRange)[2]/5)
+          max_age <- dt_select()$max_age
+          
+          if (last_age < max_age) {
+            age2 <- isolate(input$slideAgeRange)[2]-1
+          } else {
+            age2 <- paste0(((max_age-1)*5), "+")
+          }
+          
+          
+          if (isolate(input$radioValue) == "asr") {
+            var_top <- "asr"
+            digit <- 1
+            ytitle <- paste0("Age-standardized incidence rate per ", formatC(100000, format="d", big.mark=","), ", ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+            
+            
+          } 
+          else if (isolate(input$radioValue) == "cases"){
+            var_top <- "cases"
+            digit <- 0
+            ytitle <-  paste0("Number of cases, ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+            
+            
+          }
+          else if (isolate(input$radioValue) == "cum") {
+            var_top <- "cum_risk"
+            digit <- 2
+            if (last_age >= 15) {
+              age2 <- 74
+            } else {
+              age2 <- isolate(input$slideAgeRange)[2]-1
+            }
+            ytitle<-paste0("Cumulative incidence risk (percent), 0-",age2, " years old" )
+            
+            
+          }
+          
+          
+          dt_temp <- Rcan:::core.csu_dt_rank(dt_all(),
+                                             var_value = var_top,
+                                             var_rank = "cancer_lab",
+                                             group_by = "sex",
+                                             number = nb_top)
+          
+          if (isolate(input$radioCancer) == "ci5") {
+            dt_color <- dt_cancer_color_ci5
+          } 
+          else {
+            dt_color <- dt_cancer_color_globo
+          }
+          dt_temp <- merge(dt_temp, dt_color, by=c("cancer_lab"))
+          
+          
+          dt_temp$cancer_lab <-Rcan:::core.csu_legend_wrapper(dt_temp$cancer_lab, 15)
+          
+          #Use lapply to avoid loop (problem with ggplot lazy evaluation)
+          plotlist <- lapply(levels(dt_temp$sex), function (i) {
+            
+            plot_title <- isolate(registry_info$label)
+            plot_caption <- ""
+            plot_subtitle <-  paste0("Top ",nb_top, " cancer sites\n",i)
+            dt_plot <- dt_temp[sex == i]
+            dt_label_order <- setkey(unique(dt_plot[, c("cancer_lab","cancer_color", "CSU_RANK"), with=FALSE]), CSU_RANK)
+            dt_plot$cancer_lab <- factor(dt_plot$cancer_lab,levels = rev(dt_label_order$cancer_lab)) 
+            color_cancer <- as.character(rev(dt_label_order$cancer_color))
+            
+            return(
+              csu_bar_plot(
+                dt_plot,var_top=var_top,var_bar="cancer_lab",
+                plot_title=plot_title,plot_caption=plot_caption,plot_subtitle = plot_subtitle,
+                color_bar=color_cancer,
+                landscape=FALSE,digit=digit,
+                xtitle=ytitle)
+              )
+            
+          })
+
+          grid.arrange( plotlist[[1]], plotlist[[2]], ncol=2)
+          
+        }
+        
+      }
 
     }
     
@@ -774,7 +936,7 @@ shinyServer(function(input, output, session) {
       #cat(paste0(input$text_filename, ".", input$select_format))
       
       #multiple file
-      if (input$select_table==4 & 
+      if (input$select_table %in% c(4,6) & 
           input$select_format %in% c("png", "tiff", "svg")
           ) 
         {
@@ -923,7 +1085,6 @@ shinyServer(function(input, output, session) {
         
         
       }
-      
       else if (input$select_table==5) {
         
         dt_temp <- dt_all()
@@ -970,6 +1131,87 @@ shinyServer(function(input, output, session) {
                       landscape = FALSE,list_graph = FALSE,
                       FUN=temp_fun)
     
+      }
+      else if (input$select_table==6) {
+        
+        dt_temp <- dt_all()
+        
+        nb_top <- input$slideNbTopBar
+        
+        last_age <- (isolate(input$slideAgeRange)[2]/5)
+        max_age <- dt_select()$max_age
+        
+        if (last_age < max_age) {
+          age2 <- isolate(input$slideAgeRange)[2]-1
+        } else {
+          age2 <- paste0(((max_age-1)*5), "+")
+        }
+        
+        
+        if (isolate(input$radioValue) == "asr") {
+          var_top <- "asr"
+          digit <- 1
+          ytitle <- paste0("Age-standardized incidence rate per ", formatC(100000, format="d", big.mark=","), ", ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        } 
+        else if (isolate(input$radioValue) == "cases"){
+          var_top <- "cases"
+          digit <- 0
+          ytitle <-  paste0("Number of cases, ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        }
+        else if (isolate(input$radioValue) == "cum") {
+          var_top <- "cum_risk"
+          digit <- 2
+          if (last_age >= 15) {
+            age2 <- 74
+          } else {
+            age2 <- isolate(input$slideAgeRange)[2]-1
+          }
+          ytitle<-paste0("Cumulative incidence risk (percent), 0-",age2, " years old" )
+          
+          
+        }
+        
+        if (isolate(input$radioCancer) == "ci5") {
+          dt_color <- dt_cancer_color_ci5
+        } 
+        else {
+          dt_color <- dt_cancer_color_globo
+        }
+        
+        dt_color$cancer <- as.factor(dt_color$cancer)
+        dt_temp <- merge(dt_temp, dt_color, by=c("cancer_lab", "cancer"))
+        
+        canreg_output(output_type = input$select_format, filename =file_temp,
+                      landscape = FALSE,list_graph = TRUE,
+                      FUN=canreg_bar_top_single,
+                      dt=dt_temp,var_top=var_top, var_bar = "cancer_lab" ,group_by = "sex",
+                      var_color = "cancer_color",
+                      nb_top = nb_top,
+                      canreg_header = isolate(registry_info$label),
+                      digit=digit,
+                      xtitle=ytitle)
+        
+        if (input$select_format %in% c("png", "tiff", "svg")) {
+          
+          file_male <- paste0(file_temp, "001", ".", input$select_format)
+          file_female <- paste0(file_temp, "002", ".", input$select_format)
+          
+          tempfile1 <- paste0(input$text_filename, "-male.", input$select_format)
+          tempfile2 <- paste0(input$text_filename, "-female.", input$select_format)
+          
+          file.copy(file_male, tempfile1, overwrite = TRUE)
+          file.copy(file_female,tempfile2, overwrite = TRUE)
+          
+          zip(file, c(tempfile1, tempfile2))
+          
+          file.remove(c(tempfile1,tempfile2))
+
+        }
+      
       }
     })
   
@@ -1170,6 +1412,84 @@ shinyServer(function(input, output, session) {
         values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
         dims <- attr( png::readPNG (paste0(filename, ".png")), "dim" )
         values$doc <- ph_with_img(values$doc, paste0(filename, ".png"),width=graph_width,height=graph_width*dims[1]/dims[2])
+        
+      }
+      else if (input$select_table==6) {
+        
+        dt_temp <- dt_all()
+        
+        nb_top <- input$slideNbTopBar
+        
+        last_age <- (isolate(input$slideAgeRange)[2]/5)
+        max_age <- dt_select()$max_age
+        
+        if (last_age < max_age) {
+          age2 <- isolate(input$slideAgeRange)[2]-1
+        } else {
+          age2 <- paste0(((max_age-1)*5), "+")
+        }
+        
+        
+        if (isolate(input$radioValue) == "asr") {
+          var_top <- "asr"
+          digit <- 1
+          ytitle <- paste0("Age-standardized incidence rate per ", formatC(100000, format="d", big.mark=","), ", ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        } 
+        else if (isolate(input$radioValue) == "cases"){
+          var_top <- "cases"
+          digit <- 0
+          ytitle <-  paste0("Number of cases, ", isolate(input$slideAgeRange)[1], "-", age2, " years old" )
+          
+          
+        }
+        else if (isolate(input$radioValue) == "cum") {
+          var_top <- "cum_risk"
+          digit <- 2
+          if (last_age >= 15) {
+            age2 <- 74
+          } else {
+            age2 <- isolate(input$slideAgeRange)[2]-1
+          }
+          ytitle<-paste0("Cumulative incidence risk (percent), 0-",age2, " years old" )
+          
+          
+        }
+        
+        if (isolate(input$radioCancer) == "ci5") {
+          dt_color <- dt_cancer_color_ci5
+        } 
+        else {
+          dt_color <- dt_cancer_color_globo
+        }
+        
+        dt_color$cancer <- as.factor(dt_color$cancer)
+        dt_temp <- merge(dt_temp, dt_color, by=c("cancer_lab", "cancer"))
+        
+        
+        
+        
+        canreg_output(output_type = "png", filename =filename,
+                      landscape = TRUE,list_graph = TRUE,
+                      FUN=canreg_bar_top_single,
+                      dt=dt_temp,var_top=var_top, var_bar = "cancer_lab" ,group_by = "sex",
+                      var_color = "cancer_color",
+                      nb_top = nb_top,
+                      canreg_header = isolate(registry_info$label),
+                      digit=digit,
+                      xtitle=ytitle)
+        
+        values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
+        #values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
+        dims <- attr( png::readPNG (paste0(filename, "001.png")), "dim" )
+        values$doc <- ph_with_img(values$doc, paste0(filename, "001.png"),width=graph_width,height=graph_width*dims[1]/dims[2])
+        
+        
+        values$doc <-  add_slide(values$doc, layout="Canreg_basic", master="Office Theme") ## add PPTX slide (Title + content)
+        #values$doc <- ph_with_text(values$doc, isolate(registry_info$label), type="title")
+        values$doc <- ph_with_img(values$doc, paste0(filename, "002.png"),width=graph_width,height=graph_width*dims[1]/dims[2])
+        
         
       }
       

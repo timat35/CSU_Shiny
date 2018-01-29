@@ -25,7 +25,8 @@ ui <- dashboardPage(
 		
 		selectInput("select_table", "Graphics", 
 		            c(
-		              "Top cancer" = 3 ,
+		              "Top cancer both sexes" = 3 ,
+		              "Top cancer by sexes" = 6 ,
 		              "Age-specific rates (Top Cancer Sites)" = 4,
 		              "Age-specific rate by cancer sites" = 5,
 		              "Barchart of cases by age" = 2, 
