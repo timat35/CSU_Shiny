@@ -5,6 +5,6 @@ account: timat
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 258389
-bundleId: 1189029
+bundleId: 1197371
 url: https://timat.shinyapps.io/ci5_registry_graph/
-when: 1516723144.07426
+when: 1517217348.73017
