@@ -9,7 +9,9 @@
 
 # test with setwd()
 setwd("C:\\CSU_shiny\\CI5_registry_graph")
+#setwd("C:\\Users\\vignatj\\Documents\\GitHub\\CSU_shiny\\CI5_registry_graph")
 .libPaths( "C:/CSU_shiny/pkg")
+#.libPaths("//inti/cin/Xchange/Mathieu/CI5_shiny/pkg")
 shiny::runApp(launch.browser =TRUE)
 
 
