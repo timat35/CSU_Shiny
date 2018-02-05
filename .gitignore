@@ -53,3 +53,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Exclude RStudio history files
+*.Rhistory
+

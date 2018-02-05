@@ -2548,7 +2548,7 @@ canreg_cases_age_bar <- function(df_data,
   if (skin) {
     plot_subtitle <- paste("All cancers")
   } else {
-    plot_subtitle <- paste("All cancers but C44")
+    plot_subtitle <- paste("All cancers but skin")
   }
   
  
