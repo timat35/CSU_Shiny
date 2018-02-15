@@ -1066,8 +1066,8 @@ csu_merge_inc_pop <- function(inc_file,
                               group_by = NULL,
                               column_group_list = NULL){
   
-  df_inc <- read.table(inc_file, header=TRUE)
-  df_pop <- read.table(pop_file, header=TRUE)
+  df_inc <- read.table(inc_file, header=TRUE, sep="\t")
+  df_pop <- read.table(pop_file, header=TRUE, sep="\t")
   
   dt_inc <- data.table(df_inc)
   dt_pop <- data.table(df_pop)
@@ -2548,7 +2548,7 @@ canreg_cases_age_bar <- function(df_data,
   if (skin) {
     plot_subtitle <- paste("All cancers")
   } else {
-    plot_subtitle <- paste("All cancers but C44")
+    plot_subtitle <- paste("All cancers but skin")
   }
   
  

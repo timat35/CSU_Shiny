@@ -189,9 +189,10 @@ shinyServer(function(input, output, session) {
       cancer_list <- dt_list$cancer_lab
       n <- length(cancer_list)
       cancer_list <- as.character(cancer_list)
-      cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
-      
-      if (isolate(input$radioCancer) == "ci5") {
+
+      if (isolate(input$radioCancer == "ci5")) {
+        cancer_list <- c(cancer_list[n], cancer_list[n-1], cancer_list[1:(n-2)])
+      } else {
         cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
       }
       
@@ -279,9 +280,9 @@ shinyServer(function(input, output, session) {
     cancer_list <- dt_list$cancer_lab
     n <- length(cancer_list)
     cancer_list <- as.character(cancer_list)
-    cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
-    
-    if (input$radioCancer == "ci5") {
+    if (isolate(input$radioCancer == "ci5")) {
+      cancer_list <- c(cancer_list[n], cancer_list[n-1], cancer_list[1:(n-2)])
+    } else {
       cancer_list <- c(cancer_list[n], cancer_list[1:(n-1)])
     }
     
