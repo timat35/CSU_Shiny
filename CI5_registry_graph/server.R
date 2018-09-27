@@ -46,7 +46,7 @@ shinyServer(function(input, output, session) {
   file_utf8 <- ""
   
   #Change for shinyappio: 
-  #file_utf8 <- "_UTF8"
+  file_utf8 <- "_UTF8"
   
   
   #Parametre and fixed variable
