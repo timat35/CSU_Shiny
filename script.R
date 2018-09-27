@@ -1,14 +1,8 @@
 
-#  open with R3.4 ?
+# fdsgsdfsdf
 
 
-#### import CI5 data ##### 
-
-setwd("C:\\CSU_shiny\\CI5_registry_graph")
-.libPaths( "C:/CSU_shiny/pkg")
-fileRDS <- "CI5XI_country.rds"
-library(data.table)
-dt_temp <- data.table(readRDS(paste0("data/", fileRDS)))
+# this is the dev branch
 
 ################ Test app  Within R studio #################
 
