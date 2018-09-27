@@ -40,13 +40,10 @@ devtools::install_github("timat35/Rcan", subdir="Rcan")
 ################ shinyapp.io #######################
 #install package for shiny
 .libPaths( "C:/Users/laversannem/Documents/R/win-library/3.4")
-install.packages('rsconnect')
+#install.packages('rsconnect')
 
 library(rsconnect)
 
-
-# deploy app on shinyapp.io
-.libPaths( "C:/Users/laversannem/Documents/R/win-library/3.4")
 
 
 setwd("C:\\CSU_shiny\\CI5_registry_graph")
