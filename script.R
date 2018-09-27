@@ -4,8 +4,30 @@
 
 # this is the dev branch
 
-################ Test app  Within R studio #################
 
+
+
+
+
+
+#update CI5 data 
+
+setwd("C:\\CSU_shiny\\CI5_registry_graph")
+fileRDS <- "CI5XI.rds"
+dt_temp <- data.table(readRDS(paste0("data/", fileRDS)))
+
+dt_new <- data.table(read.csv("C:\\data\\CI5XI\\CI5XI.csv"))
+dt_new[, registry:= as.numeric(paste0(as.character(registry), as.character(ethnic_group)))]
+saveRDS(dt_new, (paste0("data/", fileRDS)))
+
+fileRDS <- "CI5XI_country.rds"
+dt_temp <- data.table(readRDS(paste0("data/", fileRDS)))
+
+dt_new <- data.table(read.csv("C:\\data\\CI5XI\\CI5XI_country.csv"))
+saveRDS(dt_new, (paste0("data/", fileRDS)))
+
+
+################# Test app  Within R studio #################
 
 # test with setwd()
 setwd("C:\\CSU_shiny\\CI5_registry_graph")
@@ -55,7 +77,16 @@ rsconnect::deployApp()
 #get log from shinyapp.io
 rsconnect::showLogs(streaming = TRUE)
 
-
+install.packages("backports")
+install.packages("bmp")
+install.packages("evaluate")
+install.packages("highr")
+install.packages("jpeg")
+install.packages("knitr")
+install.packages("markdown")
+install.packages("rmarkdown")
+install.packages("rprojroot")
+install.packages("tinytex")
 ################ Rinno #######################
 #Rinno installation without or R include
 #install.packages("RInno") 
