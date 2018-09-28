@@ -1,9 +1,8 @@
 
 
 #to test
-# input <- list()
-# input$select_registry <- 12001
-# 
+ #input <- list()
+ #input$select_registry <- 12001
 # input$select_format <- "pdf"
 # input$text_filename <- "test"
 # input$selectCancerSite <- "lip"
@@ -38,6 +37,8 @@ shinyServer(function(input, output, session) {
   
 
   source("source/Rcan_core.r")
+  #source("c:/projects/Rcan/Rcan/R/helper.r")
+  #source("c:/CSU_shiny/test_fonction.r")
   file_cancer_color_ci5 <- "data/color_cancer_ci5.csv"
   file_cancer_color_globo <- "data/color_cancer_globocan.csv"
   file_globocan_dict <- "data/cancer_ci5_globocan.csv"
