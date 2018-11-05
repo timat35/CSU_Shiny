@@ -36,6 +36,7 @@ setwd("C:\\CSU_shiny\\CI5_registry_graph")
 #.libPaths("//inti/cin/Xchange/Mathieu/CI5_shiny/pkg")
 shiny::runApp(launch.browser =TRUE)
 
+library()
 
 ################ Create file dictionnary #######################
 

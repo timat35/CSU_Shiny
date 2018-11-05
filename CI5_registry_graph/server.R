@@ -53,7 +53,8 @@ shinyServer(function(input, output, session) {
   #Parametre and fixed variable
   
   graph_width <- 8
-  graph_width_vertical <- 4
+  graph_width_split <- 4 
+	graph_width_vertical <- 5
   
   dt_cancer_color_ci5 <- data.table(read.csv(file_cancer_color_ci5))
   dt_cancer_color_globo <- data.table(read.csv(file_cancer_color_globo))
